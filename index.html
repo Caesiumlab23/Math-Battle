@@ -1180,40 +1180,28 @@ const SUPA = {
   enabled:  true,  // hardcoded — always on
 
   // ── Low-level fetch wrapper ──────────────────────────────────────────
-  // Uses no-cors for fire-and-forget POSTs (works from any domain)
-  // GET requests fall back to localStorage (CORS limitation in sandboxed iframes)
   async query(table, method='GET', body=null, filters=''){
     if(!this.enabled) return null;
     try{
-      if(method === 'POST'){
-        // Fire-and-forget with no-cors — data still reaches Supabase
-        // We can't read the response but the insert succeeds
-        const payload = Array.isArray(body) ? body : [body];
-        fetch(this.URL+'/rest/v1/'+table, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers:{
-            'Content-Type':'application/json',
-            'apikey': this.KEY,
-            'Authorization':'Bearer '+this.KEY,
-            'Prefer': 'return=minimal',
-          },
-          body: JSON.stringify(payload),
-        }).catch(e => console.warn('Supabase write:', e.message));
-        return true; // assume success
-      } else {
-        // GET — try with cors first, fall back gracefully
-        const res = await fetch(
-          this.URL+'/rest/v1/'+table+(filters?'?'+filters:''),{
-          method: 'GET',
-          headers:{
-            'apikey': this.KEY,
-            'Authorization':'Bearer '+this.KEY,
-          },
-        });
-        if(res.ok) return await res.json();
-        return null;
+      const url = this.URL+'/rest/v1/'+table+(filters?'?'+filters:'');
+      const headers = {
+        'Content-Type':'application/json',
+        'apikey': this.KEY,
+        'Authorization':'Bearer '+this.KEY,
+        'Prefer': method==='POST'?'return=minimal':'',
+      };
+      const opts = {method, headers};
+      if(body){
+        const payload = Array.isArray(body)?body:[body];
+        opts.body = JSON.stringify(payload);
       }
+      const res = await fetch(url, opts);
+      if(res.ok || res.status===201){
+        return method==='GET'?await res.json():true;
+      }
+      const err = await res.text().catch(()=>'');
+      console.warn('Supabase '+method+' '+table+' failed:', res.status, err);
+      return null;
     }catch(e){
       console.warn('Supabase offline:', e.message);
       return null;
