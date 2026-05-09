@@ -3,985 +3,1100 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Math Battle — Kid-Friendly Brand Validator v2</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Math Battle ⚡</title>
+
+<!-- Preconnect for speed -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+
 <style>
-/* ══════════════════════════════════════════════════
-   MATH BATTLE — KID-FRIENDLY BRAND SYSTEM v2
-   Theme: Warm Deep Purple base + Vivid Neon Accents
-   Inspired by: Duolingo × Roblox × Pokemon
-   Target: Kids 6–12 on iPad
-══════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════ */
 :root {
-  /* GAME BACKGROUNDS — Warm Purple, not cold navy */
-  --g-900: #110826;   /* page bg — deep warm purple */
-  --g-800: #1A0F3A;   /* main panel bg */
-  --g-700: #231550;   /* card bg */
-  --g-600: #2D1B69;   /* elevated card, sidebar */
-  --g-500: #3D2882;   /* borders, dividers */
-  --g-400: #5B3FA8;   /* hover borders */
-
-/* PRIMARY — Vivid Electric Purple */
-–purple: #A855F7;
-–purple-d: #9333EA;
-–purple-glow: rgba(168,85,247,0.5);
-
-/* GOLD — Bright Reward */
-–gold: #FBBF24;
-–gold-d: #F59E0B;
-–gold-glow: rgba(251,191,36,0.4);
-
-/* GREEN — Correct / Win */
-–green: #22C55E;
-–green-d: #16A34A;
-–green-glow: rgba(34,197,94,0.4);
-
-/* RED — Wrong / Danger */
-–red: #FF4444;
-–red-d: #DC2626;
-–red-glow: rgba(255,68,68,0.4);
-
-/* ORANGE — Streak / Fire / Boss */
-–orange: #FF6B00;
-–orange-d: #EA580C;
-–orange-glow: rgba(255,107,0,0.4);
-
-/* CYAN — Hints / Info / Abacus */
-–cyan: #22D3EE;
-–cyan-d: #0891B2;
-
-/* PINK — Bonus / Special */
-–pink: #F472B6;
-
-/* TEXT ON DARK */
-–t-white: #FFFFFF;
-–t-bright: #F0E6FF;   /* slightly warm white */
-–t-body: #D4C5F9;     /* lavender body text */
-–t-muted: #9B7FD4;    /* muted purple text */
-
-/* SURVEY — Clean Warm White */
-–s-bg: #FAF8FF;
-–s-card: #FFFFFF;
-–s-border: #E9E0FF;
-–s-border-focus: #A855F7;
-–s-text: #2D1B69;
-–s-text-mid: #5B3FA8;
-–s-text-soft: #9B7FD4;
-–s-selected-bg: #F3EEFF;
-–s-selected-border: #A855F7;
-
-–font-display: ‘Fredoka One’, cursive;
-–font-body: ‘Nunito’, system-ui, sans-serif;
+  --bg:       #1A0533;
+  --card:     #2D1B69;
+  --sidebar:  #231050;
+  --border:   #4C2E8A;
+  --border2:  #5B3A9E;
+  --white:    #FFFFFF;
+  --body:     #EDE9FF;
+  --muted:    #A78FD4;
+  --purple:   #A855F7;
+  --gold:     #FBBF24;
+  --green:    #22C55E;
+  --red:      #FF4444;
+  --orange:   #FF6B00;
+  --blue:     #38BDF8;
+  --pink:     #F472B6;
+  --fh:       'Fredoka One', 'Trebuchet MS', cursive;
+  --fn:       'Nunito', 'Arial Rounded MT Bold', Arial, sans-serif;
 }
 
-*{box-sizing:border-box;margin:0;padding:0;}
+/* ═══════════════════════════════════════
+   RESET
+═══════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{height:100%;background:#1A0533;}
 body{
-background:var(–g-900);
-color:var(–t-bright);
-font-family:var(–font-body);
-min-height:100vh;
+  min-height:100%;height:100%;
+  background:#1A0533;
+  color:#EDE9FF;
+  font-family:'Nunito','Arial Rounded MT Bold',Arial,sans-serif;
+  overflow:hidden;
+  position:relative;
 }
 
-.page{max-width:1100px;margin:0 auto;padding:32px 20px 80px;}
+/* ═══════════════════════════════════════
+   BACKGROUND STARS
+═══════════════════════════════════════ */
+#starfield{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.star{
+  position:absolute;border-radius:50%;background:#fff;
+  animation:twinkle var(--d,3s) var(--dl,0s) infinite alternate ease-in-out;
+}
+@keyframes twinkle{
+  from{opacity:var(--lo,.05);transform:scale(1);}
+  to{opacity:var(--hi,.5);transform:scale(1.4);}
+}
+.grid-bg{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(76,46,138,.25) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(76,46,138,.25) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse 90% 90% at 50% 50%,black 30%,transparent 100%);
+  -webkit-mask-image:radial-gradient(ellipse 90% 90% at 50% 50%,black 30%,transparent 100%);
+}
 
-/* ── HEADER ── */
-.brand-header{text-align:center;padding:48px 20px 56px;position:relative;}
-.brand-logo{font-family:var(–font-display);font-size:5rem;line-height:1;
-background:linear-gradient(135deg,var(–gold),var(–orange),var(–purple),var(–pink));
--webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-filter:drop-shadow(0 0 30px rgba(168,85,247,0.4));margin-bottom:8px;}
-.brand-sub{color:var(–t-muted);font-size:1rem;font-weight:700;margin-bottom:20px;}
-.brand-badge{display:inline-flex;align-items:center;gap:8px;
-background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.3);
-border-radius:50px;padding:6px 18px;font-size:0.8rem;font-weight:800;color:var(–purple);}
+/* ═══════════════════════════════════════
+   SCREENS
+═══════════════════════════════════════ */
+.screen{
+  position:absolute;inset:0;
+  display:none;flex-direction:column;
+  align-items:center;justify-content:center;
+  overflow:hidden;z-index:1;
+}
+.screen.on{display:flex;}
 
-/* ── SECTION ── */
-.section{margin-bottom:56px;}
-.sec-title{font-family:var(–font-display);font-size:1.6rem;color:var(–gold);
-margin-bottom:4px;display:flex;align-items:center;gap:10px;}
-.sec-dot{width:12px;height:12px;border-radius:50%;background:var(–purple);
-box-shadow:0 0 10px var(–purple);}
-.sec-sub{color:var(–t-muted);font-size:0.85rem;font-weight:600;margin-bottom:20px;
-padding-left:22px;}
+/* ═══════════════════════════════════════
+   ── HOME SCREEN ──
+═══════════════════════════════════════ */
+#sHome{
+  gap:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 20%,rgba(168,85,247,.22) 0%,transparent 70%);
+}
+.home-wrap{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  gap:28px;padding:32px 24px;
+  max-width:580px;width:100%;text-align:center;
+}
+.home-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(168,85,247,.18);border:1px solid rgba(168,85,247,.45);
+  border-radius:999px;padding:6px 18px;
+  font-size:0.78rem;font-weight:800;color:var(--purple);
+  letter-spacing:1px;text-transform:uppercase;
+  font-family:var(--fn);
+  animation:fadeUp .5s both;
+}
+.home-title{
+  font-family:var(--fh);
+  font-size:clamp(3.2rem,11vw,5.5rem);
+  color:#fff;line-height:1;
+  animation:fadeUp .55s .05s both;
+  position:relative;
+}
+.home-title .accent{
+  background:linear-gradient(135deg,#FBBF24,#FF6B00);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.home-sub{
+  font-size:1.05rem;color:var(--muted);font-weight:700;
+  animation:fadeUp .55s .1s both;
+  font-family:var(--fn);
+}
 
-/* ── PALETTE GRID ── */
-.pal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;}
-.pal-swatch{border-radius:14px;overflow:hidden;
-box-shadow:0 4px 16px rgba(0,0,0,0.4);}
-.pal-color{height:72px;display:flex;align-items:center;justify-content:center;
-font-family:var(–font-display);font-size:1.8rem;}
-.pal-info{background:var(–g-700);padding:10px 12px;}
-.pal-name{font-size:0.75rem;font-weight:800;color:var(–t-bright);text-transform:uppercase;}
-.pal-hex{font-size:0.68rem;color:var(–t-muted);font-family:monospace;margin-top:2px;}
-.pal-use{font-size:0.62rem;color:var(–gold);margin-top:3px;font-weight:700;}
+/* Stats row */
+.home-stats{
+  display:flex;gap:16px;flex-wrap:wrap;justify-content:center;
+  animation:fadeUp .55s .15s both;
+}
+.hstat{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:14px 20px;text-align:center;min-width:90px;
+}
+.hstat-val{font-family:var(--fh);font-size:1.8rem;color:var(--gold);display:block;}
+.hstat-lbl{font-size:0.7rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.5px;font-family:var(--fn);}
 
-/* ── CONTRAST AUDIT TABLE ── */
-.audit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
-.audit-card{border-radius:16px;padding:18px;position:relative;overflow:hidden;}
-.audit-title{font-family:var(–font-display);font-size:1.6rem;margin-bottom:4px;}
-.audit-bold{font-size:0.95rem;font-weight:800;margin-bottom:2px;}
-.audit-small{font-size:0.75rem;font-weight:600;margin-bottom:12px;}
-.audit-meta{font-size:0.68rem;font-family:monospace;opacity:0.7;margin-bottom:6px;}
-.audit-badges{display:flex;gap:5px;flex-wrap:wrap;}
-.badge-aaa{background:#22C55E;color:white;font-size:0.65rem;font-weight:900;
-padding:3px 8px;border-radius:20px;}
-.badge-aa{background:#3B82F6;color:white;font-size:0.65rem;font-weight:900;
-padding:3px 8px;border-radius:20px;}
-.badge-aalg{background:#F59E0B;color:#1A0533;font-size:0.65rem;font-weight:900;
-padding:3px 8px;border-radius:20px;}
-.badge-fail{background:#EF4444;color:white;font-size:0.65rem;font-weight:900;
-padding:3px 8px;border-radius:20px;}
-.ratio-num{font-size:0.8rem;font-weight:900;margin-right:6px;}
+/* Difficulty */
+.diff-wrap{width:100%;max-width:300px;animation:fadeUp .55s .2s both;}
+.diff-label-row{font-size:0.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;font-family:var(--fn);}
+.diff-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.diff-btn{
+  background:var(--card);border:2px solid var(--border);
+  border-radius:14px;padding:14px 6px;cursor:pointer;
+  transition:all .2s;text-align:center;
+  font-family:var(--fn);font-weight:800;color:var(--muted);
+}
+.diff-btn:hover{border-color:var(--purple);color:#fff;transform:translateY(-2px);}
+.diff-btn.sel{border-color:var(--purple);background:rgba(168,85,247,.18);color:var(--purple);box-shadow:0 0 20px rgba(168,85,247,.35);}
+.diff-icon{font-size:1.3rem;display:block;margin-bottom:3px;}
+.diff-name{font-size:0.8rem;display:block;}
 
-/* ── FULL RATIO TABLE ── */
-.ratio-table{width:100%;border-collapse:collapse;border-radius:16px;overflow:hidden;}
-.ratio-table th{background:var(–g-600);color:var(–gold);font-weight:800;
-padding:10px 14px;text-align:left;font-size:0.72rem;text-transform:uppercase;letter-spacing:.5px;}
-.ratio-table td{padding:10px 14px;border-bottom:1px solid var(–g-500);
-font-size:0.82rem;font-weight:700;vertical-align:middle;}
-.ratio-table tr:last-child td{border-bottom:none;}
-.ratio-table tr:hover td{background:rgba(168,85,247,0.06);}
-.color-dot{display:inline-block;width:14px;height:14px;border-radius:50%;
-margin-right:6px;vertical-align:middle;}
-.ratio-val{font-weight:900;}
-.ratio-val.aaa{color:var(–green);}
-.ratio-val.aa{color:var(–cyan);}
-.ratio-val.aalg{color:var(–gold);}
-.ratio-val.fail{color:var(–red);}
-.warn{color:var(–orange);font-size:0.7rem;font-weight:800;}
+/* Home buttons */
+.home-btns{display:flex;flex-direction:column;gap:12px;width:100%;max-width:300px;animation:fadeUp .55s .25s both;}
 
-/* ── FONT SHOWCASE ── */
-.font-box{background:var(–g-700);border:1px solid var(–g-500);border-radius:20px;
-padding:28px;margin-bottom:12px;}
-.f-display-xl{font-family:var(–font-display);font-size:4rem;color:var(–t-white);line-height:1;}
-.f-display-lg{font-family:var(–font-display);font-size:2.4rem;color:var(–gold);margin-top:8px;}
-.f-display-md{font-family:var(–font-display);font-size:1.6rem;color:var(–purple);margin-top:6px;}
-.f-body-xl{font-size:1.2rem;font-weight:900;color:var(–t-bright);margin-top:14px;}
-.f-body-lg{font-size:1rem;font-weight:700;color:var(–t-body);margin-top:4px;}
-.f-body-sm{font-size:0.8rem;font-weight:800;color:var(–t-muted);text-transform:uppercase;
-letter-spacing:1px;margin-top:4px;}
+/* ═══════════════════════════════════════
+   ── GAME SCREEN ──
+═══════════════════════════════════════ */
+#sGame{
+  flex-direction:row;align-items:stretch;justify-content:flex-start;
+  padding:0;overflow:hidden;
+}
 
-/* ── COMPONENT PREVIEW ── */
-/* Buttons */
-.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center;}
-.btn{padding:14px 24px;border:none;border-radius:14px;font-family:var(–font-body);
-font-size:1rem;font-weight:900;cursor:pointer;transition:all 0.2s;}
-.btn-xl{padding:20px 48px;font-family:var(–font-display);font-size:1.8rem;border-radius:20px;}
+/* Sidebar */
+.sidebar{
+  width:200px;flex-shrink:0;
+  background:var(--sidebar);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  padding:20px 14px;gap:16px;
+  position:relative;z-index:2;
+}
+.sb-logo{
+  font-family:var(--fh);font-size:1.3rem;color:#fff;
+  display:flex;align-items:center;gap:6px;
+  padding-bottom:14px;border-bottom:1px solid var(--border);
+}
+.sb-logo .g{color:var(--gold);}
+.sb-sec{display:flex;flex-direction:column;gap:6px;}
+.sb-lbl{font-size:0.68rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-family:var(--fn);}
 
-.btn-play{background:linear-gradient(135deg,var(–purple-d),var(–purple));color:white;
-box-shadow:0 4px 20px var(–purple-glow);animation:pulse 2s ease-in-out infinite;}
-@keyframes pulse{0%,100%{box-shadow:0 4px 20px var(–purple-glow);}
-50%{box-shadow:0 4px 32px rgba(168,85,247,0.8);}}
-.btn-correct{background:linear-gradient(135deg,var(–green-d),var(–green));color:white;
-box-shadow:0 4px 16px var(–green-glow);}
-.btn-wrong{background:linear-gradient(135deg,var(–red-d),var(–red));color:white;
-box-shadow:0 4px 16px var(–red-glow);}
-.btn-hint{background:rgba(34,211,238,0.15);border:2px solid rgba(34,211,238,0.4);
-color:var(–cyan);box-shadow:none;}
-.btn-streak{background:linear-gradient(135deg,var(–orange-d),var(–orange));color:white;
-box-shadow:0 4px 16px var(–orange-glow);}
-.btn-gold{background:linear-gradient(135deg,var(–gold-d),var(–gold));
-color:#1A0533;box-shadow:0 4px 16px var(–gold-glow);}
-.btn-ghost{background:transparent;border:2px solid var(–g-400);color:var(–t-muted);}
-.btn-next{background:linear-gradient(135deg,var(–purple-d),var(–purple));color:white;width:100%;
-padding:16px;font-size:1.1rem;box-shadow:0 4px 20px var(–purple-glow);}
+/* Score box */
+.sb-box{
+  background:rgba(26,5,51,.6);border:1px solid var(--border);
+  border-radius:12px;padding:10px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sb-val{font-family:var(--fh);font-size:1.4rem;color:#fff;}
+.sb-sublbl{font-size:0.68rem;color:var(--muted);font-weight:700;font-family:var(--fn);}
 
-/* MCQ Options */
-.mcq-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
-.mcq-btn{background:rgba(255,255,255,0.05);border:2px solid var(–g-500);
-border-radius:16px;padding:22px 12px;
-font-family:var(–font-display);font-size:2rem;color:var(–t-white);
-cursor:pointer;text-align:center;transition:all 0.15s;}
-.mcq-btn:hover{border-color:var(–purple);background:rgba(168,85,247,0.12);}
-.mcq-btn.correct{border-color:var(–green);background:rgba(34,197,94,0.15);
-box-shadow:0 0 20px rgba(34,197,94,0.3);}
-.mcq-btn.wrong{border-color:var(–red);background:rgba(255,68,68,0.12);
-box-shadow:0 0 20px rgba(255,68,68,0.2);}
+/* XP bar */
+.xp-box{
+  background:rgba(26,5,51,.6);border:1px solid var(--border);
+  border-radius:12px;padding:10px 12px;
+}
+.xp-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.xp-row .l{font-size:0.68rem;color:var(--muted);font-weight:800;font-family:var(--fn);}
+.xp-row .v{font-family:var(--fh);font-size:1rem;color:var(--gold);}
+.xp-track{height:8px;background:var(--bg);border-radius:999px;overflow:hidden;}
+.xp-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--purple),var(--gold));transition:width .6s ease;}
 
-/* Stat cards */
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-.stat-card{background:var(–g-600);border:1px solid var(–g-500);border-radius:14px;
-padding:14px 8px;text-align:center;}
-.stat-val{font-family:var(–font-display);font-size:1.8rem;line-height:1;}
-.stat-lbl{font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;
-color:var(–t-muted);margin-top:4px;}
+/* Streak */
+.streak-box{
+  background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.3);
+  border-radius:12px;padding:10px 12px;
+  display:flex;align-items:center;gap:8px;
+}
+.streak-fire{font-size:1.3rem;}
+.streak-num{font-family:var(--fh);font-size:1.6rem;color:var(--orange);text-shadow:0 0 14px rgba(255,107,0,.5);}
+.streak-sub{font-size:0.68rem;color:var(--muted);font-weight:700;font-family:var(--fn);}
 
-/* Arena */
-.arena{background:var(–g-700);border:2px solid var(–g-500);border-radius:22px;
-padding:24px;position:relative;overflow:hidden;}
-.arena::before{content:’’;position:absolute;inset:0;
-background:radial-gradient(circle at 50% 0%,rgba(168,85,247,0.08),transparent 70%);
-pointer-events:none;}
-.q-num{font-family:var(–font-display);font-size:5rem;color:var(–t-white);
-text-align:center;margin:12px 0;line-height:1;
-text-shadow:0 0 40px rgba(168,85,247,0.3);}
-.q-op{color:var(–orange);}
-.q-eq{color:var(–g-400);}
-.q-ans{color:var(–cyan);}
+/* Hints */
+.hints-row{display:flex;gap:6px;flex-wrap:wrap;}
+.hint-pip{
+  width:36px;height:36px;border-radius:10px;
+  background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;cursor:pointer;transition:all .2s;
+}
+.hint-pip:hover{background:rgba(56,189,248,.3);transform:scale(1.1);}
+.hint-pip.used{background:var(--border);border-color:var(--border);opacity:.35;cursor:not-allowed;}
 
-/* Bars */
-.bar-track{border-radius:20px;height:14px;overflow:hidden;margin-bottom:6px;}
-.bar-fill{height:100%;border-radius:20px;position:relative;overflow:hidden;}
-.bar-fill::after{content:’’;position:absolute;top:0;left:-100%;width:60%;height:100%;
-background:rgba(255,255,255,0.3);transform:skewX(-20deg);animation:shimmer 2s infinite;}
-@keyframes shimmer{to{left:150%;}}
-.bar-xp{background:linear-gradient(90deg,var(–purple-d),var(–purple),var(–pink));}
-.bar-boss{background:linear-gradient(90deg,var(–red-d),var(–orange));}
-.bar-daily{background:linear-gradient(90deg,var(–orange-d),var(–gold));}
-.bar-lbl{font-size:0.7rem;font-weight:800;color:var(–t-muted);
-display:flex;justify-content:space-between;margin-bottom:3px;}
+/* Quit btn */
+.sb-quit{margin-top:auto;}
 
-/* Achievement badges */
-.ach-row{display:flex;gap:8px;flex-wrap:wrap;}
-.ach-b{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;
-justify-content:center;font-size:1.4rem;border:2px solid var(–g-500);
-background:rgba(255,255,255,0.02);}
-.ach-b.on{border-color:var(–gold);background:rgba(251,191,36,0.12);
-box-shadow:0 0 14px rgba(251,191,36,0.35);}
-.ach-b.off{filter:grayscale(1);opacity:0.2;}
+/* Main area */
+.game-main{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:20px 24px;gap:20px;overflow:hidden;
+  position:relative;z-index:1;
+}
 
-/* Feedback / streak tags */
-.tag-row{display:flex;gap:8px;flex-wrap:wrap;}
-.tag{padding:6px 14px;border-radius:50px;font-size:0.82rem;font-weight:800;}
-.tag-correct{background:rgba(34,197,94,0.15);color:var(–green);border:1px solid rgba(34,197,94,0.3);}
-.tag-wrong{background:rgba(255,68,68,0.12);color:var(–red);border:1px solid rgba(255,68,68,0.25);}
-.tag-streak{background:linear-gradient(135deg,var(–orange-d),var(–orange));color:white;}
-.tag-xp{background:rgba(251,191,36,0.15);color:var(–gold);border:1px solid rgba(251,191,36,0.3);}
-.tag-hint{background:rgba(34,211,238,0.12);color:var(–cyan);border:1px solid rgba(34,211,238,0.25);}
+/* Timer row */
+.timer-row{width:100%;max-width:540px;display:flex;align-items:center;gap:12px;}
+.round-txt{font-size:0.78rem;font-weight:800;color:var(--muted);white-space:nowrap;font-family:var(--fn);}
+.timer-track{flex:1;height:12px;background:var(--card);border-radius:999px;overflow:hidden;border:1px solid var(--border);}
+.timer-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),var(--gold));transition:width 1s linear,background .3s;}
+.timer-fill.hot{background:linear-gradient(90deg,var(--orange),var(--red));animation:hotpulse .5s infinite alternate;}
+@keyframes hotpulse{to{opacity:.65;}}
+.timer-num{font-family:var(--fh);font-size:1.6rem;color:#fff;min-width:38px;text-align:right;}
+.timer-num.hot{color:var(--red);}
 
-/* Sidebar preview */
-.sidebar-preview{background:var(–g-600);border-radius:20px;padding:20px;border:1px solid var(–g-500);}
-.sb-avatar{width:52px;height:52px;border-radius:50%;
-background:linear-gradient(135deg,var(–purple-d),var(–purple));
-display:flex;align-items:center;justify-content:center;font-size:1.6rem;
-box-shadow:0 0 20px var(–purple-glow);}
-.sb-name{font-family:var(–font-display);font-size:1.2rem;color:var(–gold);}
-.sb-level{font-size:0.72rem;font-weight:800;color:var(–t-muted);}
-.mode-btn{width:100%;padding:10px 14px;border-radius:12px;border:2px solid var(–g-500);
-background:var(–g-700);color:var(–t-muted);font-size:0.88rem;font-weight:800;
-text-align:left;margin-bottom:6px;cursor:pointer;}
-.mode-btn.active{background:linear-gradient(135deg,var(–purple-d),var(–purple));
-border-color:transparent;color:white;box-shadow:0 3px 14px var(–purple-glow);}
+/* Question card */
+.q-card{
+  width:100%;max-width:540px;
+  background:var(--card);border:2px solid var(--border);
+  border-radius:24px;padding:36px 32px;
+  text-align:center;
+  box-shadow:0 8px 40px rgba(0,0,0,.5),0 0 60px rgba(168,85,247,.1);
+  position:relative;overflow:hidden;
+}
+.q-card::before{
+  content:'';position:absolute;top:-50px;left:50%;transform:translateX(-50%);
+  width:280px;height:100px;
+  background:radial-gradient(ellipse,rgba(168,85,247,.18) 0%,transparent 70%);
+  pointer-events:none;
+}
+.q-topic{
+  font-size:0.72rem;font-weight:800;color:var(--purple);
+  text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;font-family:var(--fn);
+}
+.q-text{
+  font-family:var(--fh);
+  font-size:clamp(2.4rem,6vw,3.8rem);
+  color:#fff;line-height:1.05;
+  text-shadow:0 0 30px rgba(168,85,247,.3);
+}
+.q-hint{
+  font-size:0.85rem;color:var(--blue);font-weight:700;
+  min-height:22px;margin-top:8px;transition:opacity .3s;font-family:var(--fn);
+}
 
-/* Popup */
-.popup-demo{background:var(–g-700);border:2px solid var(–g-500);border-radius:24px;
-padding:30px 24px;text-align:center;max-width:380px;
-box-shadow:0 20px 60px rgba(0,0,0,0.6);}
-.popup-em{font-size:4rem;margin-bottom:10px;}
-.popup-title{font-family:var(–font-display);font-size:2.2rem;color:var(–gold);margin-bottom:8px;}
-.popup-body{font-size:0.88rem;font-weight:600;color:var(–t-muted);margin-bottom:16px;line-height:1.6;}
-.chip{display:inline-block;background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.3);
-border-radius:20px;padding:5px 12px;font-weight:800;color:var(–gold);font-size:0.8rem;margin:2px;}
+/* Answer grid */
+.ans-grid{
+  width:100%;max-width:540px;
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+}
+.ans-btn{
+  background:var(--card);border:2px solid var(--border);
+  border-radius:18px;padding:22px 14px;
+  font-family:var(--fh);font-size:2rem;
+  color:#fff;cursor:pointer;
+  transition:border-color .15s,background .15s,transform .15s,box-shadow .15s;
+  text-align:center;position:relative;overflow:hidden;
+  -webkit-user-select:none;user-select:none;
+}
+.ans-btn .ltr{
+  position:absolute;top:8px;left:10px;
+  font-size:0.7rem;color:var(--muted);
+  font-family:var(--fn);font-weight:800;
+}
+.ans-btn:hover:not(.locked){
+  border-color:var(--purple);background:rgba(168,85,247,.15);
+  transform:translateY(-4px) scale(1.02);
+  box-shadow:0 0 24px rgba(168,85,247,.5);
+}
+.ans-btn:active:not(.locked){transform:scale(.96);}
+.ans-btn.correct{
+  border-color:var(--green);background:rgba(34,197,94,.2);
+  box-shadow:0 0 32px rgba(34,197,94,.55);color:var(--green);
+  animation:popIn .3s;
+}
+.ans-btn.wrong{
+  border-color:var(--red);background:rgba(255,68,68,.15);
+  box-shadow:0 0 24px rgba(255,68,68,.45);color:var(--red);
+  animation:shake .4s;
+}
+.ans-btn.locked{cursor:not-allowed;}
+@keyframes popIn{0%{transform:scale(.92);}60%{transform:scale(1.07);}100%{transform:scale(1);}}
+@keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-8px);}40%{transform:translateX(8px);}60%{transform:translateX(-5px);}80%{transform:translateX(5px);}}
 
-/* Survey preview */
-.survey-preview{background:var(–s-bg);border-radius:20px;padding:28px;color:var(–s-text);
-font-family:var(–font-body);}
-.survey-preview *{font-family:var(–font-body);}
-.sv-title{font-family:var(–font-display);font-size:2rem;color:var(–s-text);margin-bottom:4px;}
-.sv-sub{font-size:0.88rem;font-weight:600;color:#5B3FA8;margin-bottom:20px;}
-.sv-lbl{font-size:0.75rem;font-weight:800;color:var(–s-text);text-transform:uppercase;
-letter-spacing:.5px;margin-bottom:6px;display:block;}
-.sv-input{width:100%;padding:14px 16px;border:2px solid var(–s-border);
-border-radius:12px;font-size:1rem;font-weight:700;color:var(–s-text);
-background:var(–s-card);font-family:var(–font-body);outline:none;margin-bottom:14px;}
-.sv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
-.sv-card{background:var(–s-card);border:2px solid var(–s-border);
-border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer;}
-.sv-card.sel{background:var(–s-selected-bg);border-color:var(–s-selected-border);
-box-shadow:0 0 0 3px rgba(168,85,247,0.2);}
-.sv-card-num{font-family:var(–font-display);font-size:2rem;color:var(–s-text-mid);}
-.sv-card.sel .sv-card-num{color:var(–s-selected-border);}
-.sv-card-lbl{font-size:0.68rem;font-weight:800;color:#9B7FD4;}
-.sv-card.sel .sv-card-lbl{color:var(–s-selected-border);}
-.sv-btn-row{display:flex;gap:10px;}
-.sv-back{flex:1;padding:14px;border:2px solid var(–s-border);border-radius:12px;
-background:transparent;font-weight:800;font-size:0.95rem;color:#9B7FD4;cursor:pointer;
-font-family:var(–font-body);}
-.sv-next{flex:2;padding:14px;border:none;border-radius:12px;
-background:linear-gradient(135deg,var(–purple-d),var(–purple));color:white;
-font-weight:900;font-size:1rem;cursor:pointer;font-family:var(–font-body);
-box-shadow:0 4px 16px rgba(168,85,247,0.4);}
-.sv-emoji-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px;}
-.sv-emoji{background:var(–s-card);border:2px solid var(–s-border);
-border-radius:12px;padding:12px 6px;text-align:center;cursor:pointer;}
-.sv-emoji.sel{background:var(–s-selected-bg);border-color:var(–s-selected-border);}
-.sv-emoji-em{font-size:1.6rem;display:block;margin-bottom:3px;}
-.sv-emoji-lbl{font-size:0.65rem;font-weight:800;color:#9B7FD4;}
-.sv-emoji.sel .sv-emoji-lbl{color:var(–s-selected-border);}
+/* ═══════════════════════════════════════
+   TOAST / POPUPS
+═══════════════════════════════════════ */
+#toast{
+  position:fixed;top:32px;left:50%;
+  transform:translateX(-50%) translateY(-90px);
+  background:var(--card);border:2px solid var(--border);
+  border-radius:18px;padding:12px 28px;
+  font-family:var(--fh);font-size:1.4rem;
+  box-shadow:0 8px 40px rgba(0,0,0,.6);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+  z-index:200;pointer-events:none;
+  display:flex;align-items:center;gap:10px;white-space:nowrap;
+}
+#toast.show{transform:translateX(-50%) translateY(0);}
+#toast.tok-ok{border-color:var(--green);color:var(--green);}
+#toast.tok-no{border-color:var(--red);color:var(--red);}
 
-/* Rules */
-.rules-box{background:var(–g-700);border-radius:16px;overflow:hidden;border:1px solid var(–g-500);}
-.rule-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0;
-border-bottom:1px solid var(–g-500);padding:10px 14px;font-size:0.82rem;}
-.rule-row:last-child{border-bottom:none;}
-.rule-row.header{background:var(–g-600);font-size:0.72rem;font-weight:800;
-color:var(–gold);text-transform:uppercase;letter-spacing:.5px;}
-.rule-el{font-weight:800;color:var(–purple);}
-.rule-bg{font-weight:700;color:var(–t-body);}
-.rule-text{font-weight:700;color:var(–t-body);}
-.rule-note{font-weight:600;color:var(–t-muted);font-size:0.75rem;}
+/* XP float */
+.xp-pop{
+  position:fixed;pointer-events:none;z-index:300;
+  font-family:var(--fh);font-size:1.6rem;color:var(--gold);
+  text-shadow:0 0 20px rgba(251,191,36,.7);
+  animation:xprise 1.1s ease-out both;
+}
+@keyframes xprise{0%{opacity:1;transform:translateY(0) scale(1);}100%{opacity:0;transform:translateY(-80px) scale(1.3);}}
 
-/* Safe/Avoid boxes */
-.safe-avoid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-.sa-box{border-radius:14px;padding:18px;}
-.sa-box.safe{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.25);}
-.sa-box.avoid{background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.2);}
-.sa-box.arch{background:rgba(34,211,238,0.06);border:1px solid rgba(34,211,238,0.2);}
-.sa-title{font-weight:900;font-size:0.85rem;margin-bottom:10px;}
-.sa-title.safe{color:var(–green);}
-.sa-title.avoid{color:var(–red);}
-.sa-title.arch{color:var(–cyan);}
-.sa-item{font-size:0.78rem;font-weight:600;color:var(–t-body);margin-bottom:5px;
-padding-left:12px;position:relative;line-height:1.4;}
-.sa-item::before{content:’·’;position:absolute;left:0;color:var(–t-muted);}
+/* Streak banner */
+#streakBanner{
+  position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(120px);
+  background:var(--card);border:2px solid var(--orange);
+  border-radius:18px;padding:12px 28px;
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--fh);font-size:1.2rem;color:var(--orange);
+  box-shadow:0 0 40px rgba(255,107,0,.45);
+  z-index:200;pointer-events:none;
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+  white-space:nowrap;
+}
+#streakBanner.show{transform:translateX(-50%) translateY(0);}
 
-.divider{height:1px;background:var(–g-500);margin:16px 0;}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+/* Confetti */
+.cf{
+  position:fixed;pointer-events:none;z-index:400;
+  width:9px;height:9px;border-radius:2px;
+  animation:cfall var(--cd,1.4s) var(--cdl,0s) ease-in both;
+}
+@keyframes cfall{0%{opacity:1;transform:translate(0,0) rotate(0deg);}100%{opacity:0;transform:translate(var(--cx,30px),110vh) rotate(var(--cr,480deg));}}
+
+/* ═══════════════════════════════════════
+   ── RESULTS SCREEN ──
+═══════════════════════════════════════ */
+#sResults{
+  background:radial-gradient(ellipse 70% 55% at 50% 25%,rgba(168,85,247,.22) 0%,transparent 70%);
+}
+.res-wrap{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  gap:24px;padding:32px 24px;
+  max-width:540px;width:100%;text-align:center;
+  overflow-y:auto;max-height:100vh;
+}
+.res-trophy{font-size:5rem;line-height:1;animation:trophyIn .7s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes trophyIn{0%{opacity:0;transform:scale(.2) rotate(-20deg);}60%{transform:scale(1.15) rotate(5deg);}100%{opacity:1;transform:scale(1) rotate(0);}}
+.res-title{font-family:var(--fh);font-size:clamp(2rem,8vw,3.2rem);color:#fff;animation:fadeUp .5s .2s both;}
+.res-sub{color:var(--muted);font-weight:700;font-size:1rem;animation:fadeUp .5s .3s both;font-family:var(--fn);}
+.res-score{
+  font-family:var(--fh);font-size:clamp(4rem,13vw,5.5rem);
+  color:var(--gold);line-height:1;
+  text-shadow:0 0 60px rgba(251,191,36,.55);
+  animation:fadeUp .5s .35s both;
+}
+.new-best{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.4);
+  border-radius:999px;padding:7px 18px;
+  color:var(--gold);font-weight:800;font-size:0.9rem;
+  animation:pulse 1.5s infinite;font-family:var(--fn);
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,.4);}50%{box-shadow:0 0 0 12px rgba(251,191,36,0);}}
+
+.res-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  width:100%;animation:fadeUp .5s .45s both;
+}
+.rstat{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:14px 10px;text-align:center;
+}
+.rstat-val{font-family:var(--fh);font-size:1.8rem;display:block;margin-bottom:3px;}
+.rstat-lbl{font-size:0.68rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-family:var(--fn);}
+.res-btns{display:flex;flex-direction:column;gap:10px;width:100%;animation:fadeUp .5s .55s both;}
+
+/* ═══════════════════════════════════════
+   ── SURVEY SCREEN ──
+   Strictly scoped — light theme
+═══════════════════════════════════════ */
+#surveyScreen{
+  position:fixed;inset:0;
+  background:#F5F7FF;
+  z-index:50;
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:40px 24px;
+}
+#surveyScreen.on{display:flex;}
+
+#surveyScreen .sv-wrap{width:100%;max-width:460px;display:flex;flex-direction:column;gap:24px;}
+#surveyScreen .sv-logo{font-family:'Fredoka One','Trebuchet MS',cursive;font-size:1.9rem;color:#1E1B4B;display:flex;align-items:center;gap:8px;}
+#surveyScreen .sv-logo span{color:#7C3AED;}
+#surveyScreen .sv-step{font-size:0.75rem;font-weight:800;color:#7B88B8;text-transform:uppercase;letter-spacing:1px;font-family:'Nunito','Arial Rounded MT Bold',Arial,sans-serif;}
+#surveyScreen .sv-prog{display:flex;gap:8px;}
+#surveyScreen .sv-dot{height:5px;border-radius:999px;flex:1;background:#E0E7FF;transition:background .3s;}
+#surveyScreen .sv-dot.done{background:#7C3AED;}
+#surveyScreen .sv-q{font-family:'Fredoka One','Trebuchet MS',cursive;font-size:clamp(1.4rem,5vw,2rem);color:#1E1B4B;line-height:1.2;}
+#surveyScreen .sv-sub{font-size:0.88rem;color:#7B88B8;font-weight:700;margin-top:-12px;font-family:'Nunito','Arial Rounded MT Bold',Arial,sans-serif;}
+#surveyScreen .sv-opts{display:flex;flex-direction:column;gap:10px;}
+#surveyScreen .sv-opt{
+  background:#FFFFFF;border:2px solid #E0E7FF;
+  border-radius:14px;padding:15px 18px;color:#1E1B4B;
+  font-family:'Nunito','Arial Rounded MT Bold',Arial,sans-serif;
+  font-weight:700;font-size:0.95rem;cursor:pointer;
+  transition:border-color .15s,background .15s;
+  display:flex;align-items:center;gap:12px;
+}
+#surveyScreen .sv-opt:hover{border-color:#7C3AED;background:#F5F0FF;}
+#surveyScreen .sv-opt.picked{background:#EDE9FE;border-color:#7C3AED;}
+#surveyScreen .sv-check{width:22px;height:22px;border-radius:50%;border:2px solid #E0E7FF;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.7rem;transition:all .15s;}
+#surveyScreen .sv-opt.picked .sv-check{background:#7C3AED;border-color:#7C3AED;color:#fff;}
+#surveyScreen .sv-btns{display:flex;gap:10px;}
+#surveyScreen .sv-next{
+  flex:1;background:#7C3AED;color:#fff;border:none;border-radius:14px;
+  padding:15px;font-family:'Nunito','Arial Rounded MT Bold',Arial,sans-serif;
+  font-weight:900;font-size:1rem;cursor:pointer;transition:background .15s,transform .15s;
+}
+#surveyScreen .sv-next:hover:not(:disabled){background:#6D28D9;transform:translateY(-2px);}
+#surveyScreen .sv-next:disabled{background:#E0E7FF;color:#7B88B8;cursor:not-allowed;transform:none;}
+#surveyScreen .sv-skip{
+  background:transparent;color:#7B88B8;border:2px solid #E0E7FF;
+  border-radius:14px;padding:15px 18px;
+  font-family:'Nunito','Arial Rounded MT Bold',Arial,sans-serif;
+  font-weight:800;font-size:0.9rem;cursor:pointer;transition:all .15s;
+}
+#surveyScreen .sv-skip:hover{border-color:#7C3AED;color:#7C3AED;}
+
+/* ═══════════════════════════════════════
+   SHARED BUTTONS
+═══════════════════════════════════════ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:'Nunito','Arial Rounded MT Bold',Arial,sans-serif;
+  font-weight:900;border:none;border-radius:16px;cursor:pointer;
+  transition:transform .15s,box-shadow .15s,opacity .15s;
+  -webkit-user-select:none;user-select:none;
+  position:relative;overflow:hidden;
+}
+.btn::after{content:'';position:absolute;inset:0;border-radius:inherit;background:rgba(255,255,255,.13);opacity:0;transition:opacity .15s;}
+.btn:hover::after{opacity:1;}
+.btn:active{transform:scale(.95)!important;}
+.btn-purple{background:var(--purple);color:#fff;box-shadow:0 5px 22px rgba(168,85,247,.45);}
+.btn-gold{background:var(--gold);color:#1A0800;box-shadow:0 5px 22px rgba(251,191,36,.4);}
+.btn-green{background:var(--green);color:#fff;box-shadow:0 5px 22px rgba(34,197,94,.4);}
+.btn-ghost{background:transparent;color:var(--muted);border:2px solid var(--border);}
+.btn-lg{padding:18px 40px;font-size:1.2rem;border-radius:20px;}
+.btn-md{padding:14px 28px;font-size:1rem;}
+.btn-sm{padding:9px 18px;font-size:0.875rem;border-radius:12px;}
+.btn-full{width:100%;}
+.btn-lg:hover{transform:translateY(-3px);}
+.btn-md:hover{transform:translateY(-2px);}
+
+/* ═══════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.screen{animation:fadeIn .3s ease;}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — mobile / iPad portrait
+═══════════════════════════════════════ */
+@media(max-width:700px){
+  #sGame{flex-direction:column;}
+  .sidebar{
+    width:100%;flex-direction:row;flex-wrap:wrap;
+    padding:10px 14px;gap:8px;align-items:center;
+    border-right:none;border-bottom:1px solid var(--border);
+    overflow-x:auto;flex-shrink:0;
+  }
+  .sb-logo{padding-bottom:0;border-bottom:none;font-size:1.1rem;}
+  .sb-sec{flex-direction:row;align-items:center;}
+  .sb-lbl{display:none;}
+  .xp-box{min-width:120px;padding:7px 10px;}
+  .xp-row .l{display:none;}
+  .streak-box{padding:6px 10px;}
+  .sb-quit{margin-top:0;margin-left:auto;}
+  .game-main{padding:14px 14px;gap:14px;}
+  .q-card{padding:22px 16px;border-radius:18px;}
+  .q-text{font-size:2.2rem;}
+  .ans-btn{font-size:1.5rem;padding:16px 10px;border-radius:14px;}
+}
+@media(max-width:400px){
+  .ans-grid{gap:8px;}
+  .ans-btn{font-size:1.3rem;padding:14px 8px;}
+  .home-title{font-size:3rem;}
+}
 </style>
 
 </head>
 <body>
-<div class="page">
 
-<!-- ═══ HEADER ═══ -->
+<!-- ── BG ── -->
 
-<div class="brand-header">
-  <div class="brand-logo">⚡ Math Battle</div>
-  <div class="brand-sub">Kid-Friendly Brand Validator v2 — Warm Purple Theme</div>
-  <div class="brand-badge">WCAG 2.1 · AA = 4.5:1 · AAA = 7:1 · Large AA = 3:1</div>
-</div>
+<div id="starfield"></div>
+<div class="grid-bg"></div>
 
-<!-- ═══ 1. COLOUR PALETTE ═══ -->
+<!-- ── TOAST ── -->
 
-<div class="section">
-  <div class="sec-title"><div class="sec-dot"></div>1. Colour Palette</div>
-  <div class="sec-sub">Warm deep purple base — vivid accents for kids. Every colour has one job.</div>
+<div id="toast"></div>
 
-  <div style="font-size:0.75rem;font-weight:800;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🌌 Game Dark Theme — Warm Purple Base</div>
-  <div class="pal-grid" style="margin-bottom:22px;">
-    <div class="pal-swatch"><div class="pal-color" style="background:#110826;color:#9B7FD4;">Aa</div>
-      <div class="pal-info"><div class="pal-name">Game BG</div><div class="pal-hex">#110826</div><div class="pal-use">Page background</div></div></div>
-    <div class="pal-swatch"><div class="pal-color" style="background:#1A0F3A;color:#9B7FD4;">Aa</div>
-      <div class="pal-info"><div class="pal-name">Panel BG</div><div class="pal-hex">#1A0F3A</div><div class="pal-use">Main content area</div></div></div>
-    <div class="pal-swatch"><div class="pal-color" style="background:#231550;color:#D4C5F9;">Aa</div>
-      <div class="pal-info"><div class="pal-name">Card BG</div><div class="pal-hex">#231550</div><div class="pal-use">Arena, cards</div></div></div>
-    <div class="pal-swatch"><div class="pal-color" style="background:#2D1B69;color:#D4C5F9;">Aa</div>
-      <div class="pal-info"><div class="pal-name">Sidebar BG</div><div class="pal-hex">#2D1B69</div><div class="pal-use">Sidebar, elevated</div></div></div>
-    <div class="pal-swatch"><div class="pal-color" style="background:#3D2882;color:#D4C5F9;">Aa</div>
-      <div class="pal-info"><div class="pal-name">Border</div><div class="pal-hex">#3D2882</div><div class="pal-use">Dividers, borders</div></div></div>
-    <div class="pal-swatch"><div class="pal-color" style="background:#A855F7;color:white;">Aa</div>
-      <div class="pal-info"><div class="pal-name">Purple</div><div class="pal-hex">#A855F7</div><div class="pal-use">Buttons, active</div></div></div>
-    <div class="pal-swatch"><div class="pal-color" style="background:#FBBF24;color:#1A0533;">Aa</div>
-      <div class="pal-info"><div class="pal-name">Gold</div><div class="pal-hex">#FBBF24</div><div class="pal-use">XP, coins, stars</div></div></div>
-    <div class="pal-swatch"><div class="pal-color" style="background:#22C55E;color:white;">Aa</div>
-      <div class="pal-info"><div class="pal-name">Green</div><div class="pal-hex">#22C55E</div><div class="pal-use">Correct answers</div></div></div>
-    <div class="pal-swatch"><div class="pal-color" style="background:#FF4444;color:white;">Aa</div>
-      <div class="pal-info"><div class="pal-name">Red</div><div class="pal-hex">#FF4444</div><div class="pal-use">Wrong, danger</div></div></div>
-    <div class="pal-swatch"><div class="pal-color" style="background:#FF6B00;color:white;">Aa</div>
-      <div class="pal-info"><div class="pal-name">Orange</div><div class="pal-hex">#FF6B00</div><div class="pal-use">Streak, fire, boss</div></div></div>
-    <div class="pal-swatch"><div class="pal-color" style="background:#22D3EE;color:#110826;">Aa</div>
-      <div class="pal-info"><div class="pal-name">Cyan</div><div class="pal-hex">#22D3EE</div><div class="pal-use">Hints, abacus</div></div></div>
-    <div class="pal-swatch"><div class="pal-color" style="background:#F472B6;color:white;">Aa</div>
-      <div class="pal-info"><div class="pal-name">Pink</div><div class="pal-hex">#F472B6</div><div class="pal-use">Bonus, special</div></div></div>
-  </div>
+<!-- ── STREAK BANNER ── -->
 
-  <div style="font-size:0.75rem;font-weight:800;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">☀️ Survey Light Theme — Clean Warm White</div>
-  <div class="pal-grid">
-    <div class="pal-swatch"><div class="pal-color" style="background:#FAF8FF;color:#9B7FD4;border:1px solid #E9E0FF;">Aa</div>
-      <div class="pal-info"><div class="pal-name">Survey BG</div><div class="pal-hex">#FAF8FF</div><div class="pal-use">Survey page bg</div></div></div>
-    <div class="pal-swatch"><div class="pal-color" style="background:#FFFFFF;color:#9B7FD4;border:1px solid #E9E0FF;">Aa</div>
-      <div class="pal-info"><div class="pal-name">Card White</div><div class="pal-hex">#FFFFFF</div><div class="pal-use">Cards, inputs</div></div></div>
-    <div class="pal-swatch"><div class="pal-color" style="background:#F3EEFF;color:#9B7FD4;border:1px solid #E9E0FF;">Aa</div>
-      <div class="pal-info"><div class="pal-name">Selected BG</div><div class="pal-hex">#F3EEFF</div><div class="pal-use">Selected card bg</div></div></div>
-    <div class="pal-swatch"><div class="pal-color" style="background:#2D1B69;color:white;">Aa</div>
-      <div class="pal-info"><div class="pal-name">Survey Text</div><div class="pal-hex">#2D1B69</div><div class="pal-use">All text on light</div></div></div>
-    <div class="pal-swatch"><div class="pal-color" style="background:#5B3FA8;color:white;">Aa</div>
-      <div class="pal-info"><div class="pal-name">Mid Text</div><div class="pal-hex">#5B3FA8</div><div class="pal-use">Body text on light</div></div></div>
-  </div>
-</div>
+<div id="streakBanner"><span id="streakBannerText">🔥 3× Streak!</span></div>
 
-<!-- ═══ 2. CONTRAST AUDIT — GAME ═══ -->
+<!-- ════════════════════════════════════
+     HOME SCREEN
+════════════════════════════════════ -->
 
-<div class="section">
-  <div class="sec-title"><div class="sec-dot"></div>2. Contrast Audit — Game Dark Theme</div>
-  <div class="sec-sub">Every text colour on every background. See it, read it, approve it.</div>
-  <div class="audit-grid">
+<div class="screen on" id="sHome">
+  <div class="home-wrap">
+    <div class="home-badge">⚡ Kids Math Game</div>
 
 ```
-<div class="audit-card" style="background:#110826;border:1px solid #3D2882;">
-  <div class="audit-title" style="font-family:'Fredoka One',cursive;color:#FFFFFF;">7 × 8 = ?</div>
-  <div class="audit-bold" style="color:#FFFFFF;">White on Game BG</div>
-  <div class="audit-small" style="color:#FFFFFF;">Questions, scores, headings</div>
-  <div class="audit-meta">#FFFFFF on #110826</div>
-  <div class="audit-badges">
-    <span class="ratio-num aaa" style="color:#22C55E;">21.5:1</span>
-    <span class="badge-aaa">AAA</span><span class="badge-aaa">AA</span>
+<div class="home-title">Math<br><span class="accent">Battle</span></div>
+
+<p class="home-sub">Answer fast. Build streaks. Earn XP!</p>
+
+<div class="home-stats">
+  <div class="hstat"><span class="hstat-val" id="hBest">0</span><span class="hstat-lbl">Best Score</span></div>
+  <div class="hstat"><span class="hstat-val" id="hGames">0</span><span class="hstat-lbl">Played</span></div>
+  <div class="hstat"><span class="hstat-val" id="hStreak">0</span><span class="hstat-lbl">Best Streak</span></div>
+</div>
+
+<div class="diff-wrap">
+  <div class="diff-label-row">Choose Difficulty</div>
+  <div class="diff-grid">
+    <div class="diff-btn sel" data-d="easy"   onclick="pickDiff('easy',this)"><span class="diff-icon">🌱</span><span class="diff-name">Easy</span></div>
+    <div class="diff-btn"     data-d="medium" onclick="pickDiff('medium',this)"><span class="diff-icon">⚡</span><span class="diff-name">Medium</span></div>
+    <div class="diff-btn"     data-d="hard"   onclick="pickDiff('hard',this)"><span class="diff-icon">🔥</span><span class="diff-name">Hard</span></div>
   </div>
 </div>
 
-<div class="audit-card" style="background:#110826;border:1px solid #3D2882;">
-  <div class="audit-title" style="font-family:'Fredoka One',cursive;color:#F0E6FF;">Score: 1,250</div>
-  <div class="audit-bold" style="color:#F0E6FF;">Warm White on Game BG</div>
-  <div class="audit-small" style="color:#F0E6FF;">Body text, labels</div>
-  <div class="audit-meta">#F0E6FF on #110826</div>
-  <div class="audit-badges">
-    <span class="ratio-num" style="color:#22C55E;">18.2:1</span>
-    <span class="badge-aaa">AAA</span><span class="badge-aaa">AA</span>
-  </div>
-</div>
-
-<div class="audit-card" style="background:#110826;border:1px solid #3D2882;">
-  <div class="audit-title" style="font-family:'Fredoka One',cursive;color:#D4C5F9;">Round 3 of 10</div>
-  <div class="audit-bold" style="color:#D4C5F9;">Lavender on Game BG</div>
-  <div class="audit-small" style="color:#D4C5F9;">Secondary text</div>
-  <div class="audit-meta">#D4C5F9 on #110826</div>
-  <div class="audit-badges">
-    <span class="ratio-num" style="color:#22C55E;">12.1:1</span>
-    <span class="badge-aaa">AAA</span><span class="badge-aaa">AA</span>
-  </div>
-</div>
-
-<div class="audit-card" style="background:#110826;border:1px solid #3D2882;">
-  <div class="audit-title" style="font-family:'Fredoka One',cursive;color:#9B7FD4;">Hints Left</div>
-  <div class="audit-bold" style="color:#9B7FD4;">Muted on Game BG</div>
-  <div class="audit-small" style="color:#9B7FD4;">Labels, secondary — use bold ≥14px</div>
-  <div class="audit-meta">#9B7FD4 on #110826</div>
-  <div class="audit-badges">
-    <span class="ratio-num" style="color:#22C55E;">6.8:1</span>
-    <span class="badge-aaa">AAA</span><span class="badge-aa">AA</span>
-  </div>
-</div>
-
-<div class="audit-card" style="background:#231550;border:1px solid #3D2882;">
-  <div class="audit-title" style="font-family:'Fredoka One',cursive;color:#FFFFFF;">42</div>
-  <div class="audit-bold" style="color:#FFFFFF;">White on Card BG</div>
-  <div class="audit-small" style="color:#FFFFFF;">MCQ answers, card headings</div>
-  <div class="audit-meta">#FFFFFF on #231550</div>
-  <div class="audit-badges">
-    <span class="ratio-num" style="color:#22C55E;">15.8:1</span>
-    <span class="badge-aaa">AAA</span><span class="badge-aaa">AA</span>
-  </div>
-</div>
-
-<div class="audit-card" style="background:#231550;border:1px solid #3D2882;">
-  <div class="audit-title" style="font-family:'Fredoka One',cursive;color:#D4C5F9;">Answer A</div>
-  <div class="audit-bold" style="color:#D4C5F9;">Lavender on Card BG</div>
-  <div class="audit-small" style="color:#D4C5F9;">Card body text</div>
-  <div class="audit-meta">#D4C5F9 on #231550</div>
-  <div class="audit-badges">
-    <span class="ratio-num" style="color:#22C55E;">8.9:1</span>
-    <span class="badge-aaa">AAA</span><span class="badge-aaa">AA</span>
-  </div>
-</div>
-
-<div class="audit-card" style="background:#2D1B69;border:1px solid #3D2882;">
-  <div class="audit-title" style="font-family:'Fredoka One',cursive;color:#FFFFFF;">Leaderboard</div>
-  <div class="audit-bold" style="color:#FFFFFF;">White on Sidebar BG</div>
-  <div class="audit-small" style="color:#FFFFFF;">Sidebar headings, nav</div>
-  <div class="audit-meta">#FFFFFF on #2D1B69</div>
-  <div class="audit-badges">
-    <span class="ratio-num" style="color:#22C55E;">12.4:1</span>
-    <span class="badge-aaa">AAA</span><span class="badge-aaa">AA</span>
-  </div>
-</div>
-
-<div class="audit-card" style="background:#2D1B69;border:1px solid #3D2882;">
-  <div class="audit-title" style="font-family:'Fredoka One',cursive;color:#9B7FD4;">XP: 350</div>
-  <div class="audit-bold" style="color:#9B7FD4;">Muted on Sidebar</div>
-  <div class="audit-small" style="color:#9B7FD4;">Use bold ≥16px only</div>
-  <div class="audit-meta">#9B7FD4 on #2D1B69</div>
-  <div class="audit-badges">
-    <span class="ratio-num" style="color:#FBBF24;">4.2:1</span>
-    <span class="badge-aalg">AA-LG</span><span class="badge-aa">AA</span>
-  </div>
-</div>
-
-<div class="audit-card" style="background:#110826;border:1px solid #3D2882;">
-  <div class="audit-title" style="font-family:'Fredoka One',cursive;color:#FBBF24;">+150 XP!</div>
-  <div class="audit-bold" style="color:#FBBF24;">Gold on Game BG</div>
-  <div class="audit-small" style="color:#FBBF24;">XP, coins, stars display</div>
-  <div class="audit-meta">#FBBF24 on #110826</div>
-  <div class="audit-badges">
-    <span class="ratio-num" style="color:#22C55E;">11.2:1</span>
-    <span class="badge-aaa">AAA</span><span class="badge-aaa">AA</span>
-  </div>
-</div>
-
-<div class="audit-card" style="background:#231550;border:1px solid #3D2882;">
-  <div class="audit-title" style="font-family:'Fredoka One',cursive;color:#FBBF24;">🪙 120</div>
-  <div class="audit-bold" style="color:#FBBF24;">Gold on Card BG</div>
-  <div class="audit-small" style="color:#FBBF24;">Coins on card</div>
-  <div class="audit-meta">#FBBF24 on #231550</div>
-  <div class="audit-badges">
-    <span class="ratio-num" style="color:#22C55E;">8.2:1</span>
-    <span class="badge-aaa">AAA</span><span class="badge-aaa">AA</span>
-  </div>
-</div>
-
-<div class="audit-card" style="background:#110826;border:1px solid #22C55E;">
-  <div class="audit-title" style="font-family:'Fredoka One',cursive;color:#22C55E;">✓ Correct!</div>
-  <div class="audit-bold" style="color:#22C55E;">Green on Game BG</div>
-  <div class="audit-small" style="color:#22C55E;">Correct answer feedback</div>
-  <div class="audit-meta">#22C55E on #110826</div>
-  <div class="audit-badges">
-    <span class="ratio-num" style="color:#22C55E;">9.3:1</span>
-    <span class="badge-aaa">AAA</span><span class="badge-aaa">AA</span>
-  </div>
-</div>
-
-<div class="audit-card" style="background:#231550;border:1px solid #22C55E;background:rgba(34,197,94,0.15);">
-  <div class="audit-title" style="font-family:'Fredoka One',cursive;color:#22C55E;">✓ 56</div>
-  <div class="audit-bold" style="color:#22C55E;">Green on Correct Card</div>
-  <div class="audit-small" style="color:#22C55E;">MCQ correct state</div>
-  <div class="audit-meta">#22C55E on rgba green bg</div>
-  <div class="audit-badges">
-    <span class="ratio-num" style="color:#22C55E;">7.1:1</span>
-    <span class="badge-aaa">AAA</span><span class="badge-aaa">AA</span>
-  </div>
-</div>
-
-<div class="audit-card" style="background:#110826;border:1px solid #FF4444;">
-  <div class="audit-title" style="font-family:'Fredoka One',cursive;color:#FF4444;">✗ Wrong!</div>
-  <div class="audit-bold" style="color:#FF4444;">Red on Game BG</div>
-  <div class="audit-small" style="color:#FF4444;">Wrong answer feedback</div>
-  <div class="audit-meta">#FF4444 on #110826</div>
-  <div class="audit-badges">
-    <span class="ratio-num" style="color:#22C55E;">6.4:1</span>
-    <span class="badge-aaa">AAA</span><span class="badge-aa">AA</span>
-  </div>
-</div>
-
-<div class="audit-card" style="background:#110826;border:1px solid #3D2882;">
-  <div class="audit-title" style="font-family:'Fredoka One',cursive;color:#FF6B00;">🔥 x5 Streak</div>
-  <div class="audit-bold" style="color:#FF6B00;">Orange on Game BG</div>
-  <div class="audit-small" style="color:#FF6B00;">Streak, fire, boss HP</div>
-  <div class="audit-meta">#FF6B00 on #110826</div>
-  <div class="audit-badges">
-    <span class="ratio-num" style="color:#22C55E;">8.9:1</span>
-    <span class="badge-aaa">AAA</span><span class="badge-aaa">AA</span>
-  </div>
-</div>
-
-<div class="audit-card" style="background:#110826;border:1px solid #3D2882;">
-  <div class="audit-title" style="font-family:'Fredoka One',cursive;color:#22D3EE;">💡 Hint</div>
-  <div class="audit-bold" style="color:#22D3EE;">Cyan on Game BG</div>
-  <div class="audit-small" style="color:#22D3EE;">Hints, abacus, info</div>
-  <div class="audit-meta">#22D3EE on #110826</div>
-  <div class="audit-badges">
-    <span class="ratio-num" style="color:#22C55E;">10.4:1</span>
-    <span class="badge-aaa">AAA</span><span class="badge-aaa">AA</span>
-  </div>
-</div>
-
-<div class="audit-card" style="background:#A855F7;border:1px solid #A855F7;">
-  <div class="audit-title" style="font-family:'Fredoka One',cursive;color:#FFFFFF;">⚡ Play Now</div>
-  <div class="audit-bold" style="color:#FFFFFF;">White on Purple Btn</div>
-  <div class="audit-small" style="color:#FFFFFF;">All primary buttons</div>
-  <div class="audit-meta">#FFFFFF on #A855F7</div>
-  <div class="audit-badges">
-    <span class="ratio-num" style="color:#22C55E;">5.2:1</span>
-    <span class="badge-aa">AA</span><span class="badge-aa">AA</span>
-  </div>
+<div class="home-btns">
+  <button class="btn btn-purple btn-lg btn-full" onclick="startGame()">⚡ Play Now</button>
+  <button class="btn btn-ghost btn-md btn-full"  onclick="showSurvey()">✏️ Quick Survey</button>
 </div>
 ```
 
   </div>
 </div>
 
-<!-- ═══ 3. CONTRAST AUDIT — SURVEY ═══ -->
+<!-- ════════════════════════════════════
+     GAME SCREEN
+════════════════════════════════════ -->
 
-<div class="section">
-  <div class="sec-title"><div class="sec-dot"></div>3. Contrast Audit — Survey Light Theme</div>
-  <div class="sec-sub">Parent-facing form. Clean, readable, trustworthy.</div>
-  <div class="row3">
-    <div style="background:#FAF8FF;border-radius:16px;padding:18px;">
-      <div style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:#2D1B69;margin-bottom:4px;">Student Registration</div>
-      <div style="font-size:0.88rem;font-weight:800;color:#2D1B69;margin-bottom:4px;">Survey heading on BG</div>
-      <div style="font-size:0.75rem;font-weight:600;color:#2D1B69;margin-bottom:10px;">Small text sample</div>
-      <div style="font-size:0.65rem;font-family:monospace;color:#9B7FD4;margin-bottom:6px;">#2D1B69 on #FAF8FF</div>
-      <div style="display:flex;gap:4px;"><span class="badge-aaa">AAA</span><span class="badge-aaa">AA</span>
-        <span style="font-size:0.7rem;font-weight:900;color:#22C55E;margin-left:4px;">14.2:1</span></div>
-    </div>
-    <div style="background:#FFFFFF;border-radius:16px;padding:18px;border:1px solid #E9E0FF;">
-      <div style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:#2D1B69;margin-bottom:4px;">Tahun 2</div>
-      <div style="font-size:0.88rem;font-weight:800;color:#2D1B69;margin-bottom:4px;">Text on card white</div>
-      <div style="font-size:0.75rem;font-weight:600;color:#5B3FA8;margin-bottom:10px;">Secondary text sample</div>
-      <div style="font-size:0.65rem;font-family:monospace;color:#9B7FD4;margin-bottom:6px;">#2D1B69 on #FFFFFF</div>
-      <div style="display:flex;gap:4px;"><span class="badge-aaa">AAA</span><span class="badge-aaa">AA</span>
-        <span style="font-size:0.7rem;font-weight:900;color:#22C55E;margin-left:4px;">15.8:1</span></div>
-    </div>
-    <div style="background:#F3EEFF;border-radius:16px;padding:18px;border:2px solid #A855F7;">
-      <div style="font-family:'Fredoka One',cursive;font-size:1.4rem;color:#2D1B69;margin-bottom:4px;">✓ Ages 8–10</div>
-      <div style="font-size:0.88rem;font-weight:800;color:#2D1B69;margin-bottom:4px;">Selected card</div>
-      <div style="font-size:0.75rem;font-weight:600;color:#A855F7;margin-bottom:10px;">Purple on selected bg</div>
-      <div style="font-size:0.65rem;font-family:monospace;color:#9B7FD4;margin-bottom:6px;">#2D1B69 on #F3EEFF</div>
-      <div style="display:flex;gap:4px;"><span class="badge-aaa">AAA</span><span class="badge-aaa">AA</span>
-        <span style="font-size:0.7rem;font-weight:900;color:#22C55E;margin-left:4px;">12.6:1</span></div>
-    </div>
-  </div>
-</div>
+<div class="screen" id="sGame">
 
-<!-- ═══ 4. FONT SHOWCASE ═══ -->
-
-<div class="section">
-  <div class="sec-title"><div class="sec-dot"></div>4. Font Showcase</div>
-  <div class="sec-sub">Fredoka One for numbers/scores/headings. Nunito for everything else. Both on iPad at real size.</div>
-  <div class="row2">
-    <div class="font-box">
-      <div style="font-size:0.68rem;font-weight:800;color:var(--t-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;">FREDOKA ONE — Numbers, Scores, Headings</div>
-      <div class="f-display-xl">7 × 8 = ?</div>
-      <div class="f-display-lg">Score: 2,450</div>
-      <div class="f-display-md">Level 5 · Dragon</div>
-      <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:var(--t-muted);margin-top:8px;">Q7 · Multiply · Tahun 3</div>
-    </div>
-    <div class="font-box">
-      <div style="font-size:0.68rem;font-weight:800;color:var(--t-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;">NUNITO — Body, Labels, Buttons, Survey</div>
-      <div class="f-body-xl">⚡ Play Now!</div>
-      <div class="f-body-lg">Choose your answer carefully</div>
-      <div class="f-body-sm">Battle Mode · Mixed Topics</div>
-      <div style="font-size:0.88rem;font-weight:600;color:var(--t-muted);margin-top:10px;line-height:1.5;">
-        Your child answered 47 questions correctly this week with 89% accuracy in Tahun 3 topics.
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ 5. COMPONENT SAMPLES ═══ -->
-
-<div class="section">
-  <div class="sec-title"><div class="sec-dot"></div>5. Component Samples</div>
-  <div class="sec-sub">See every interactive element exactly as it will look on iPad.</div>
-
-  <!-- Buttons -->
-
-  <div style="font-size:0.72rem;font-weight:800;color:var(--t-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Buttons</div>
-  <div class="btn-row" style="margin-bottom:6px;">
-    <button class="btn btn-xl btn-play">⚡ Play Now</button>
-  </div>
-  <div class="btn-row">
-    <button class="btn btn-play" style="padding:12px 22px;font-size:0.95rem;animation:none;">▶ Continue</button>
-    <button class="btn btn-correct" style="padding:12px 22px;font-size:0.95rem;">✓ Correct!</button>
-    <button class="btn btn-wrong" style="padding:12px 22px;font-size:0.95rem;">✗ Wrong</button>
-    <button class="btn btn-hint" style="padding:12px 22px;font-size:0.95rem;">💡 Hint</button>
-    <button class="btn btn-streak" style="padding:12px 22px;font-size:0.95rem;">🔥 Streak</button>
-    <button class="btn btn-gold" style="padding:12px 22px;font-size:0.95rem;">🪙 Collect XP</button>
-    <button class="btn btn-ghost" style="padding:12px 22px;font-size:0.95rem;">← Back</button>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- Game Arena + Sidebar -->
-
-  <div style="font-size:0.72rem;font-weight:800;color:var(--t-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Game Screen Preview</div>
-  <div class="row2">
-    <!-- Arena -->
-    <div class="arena">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-        <div style="background:rgba(168,85,247,0.2);border:1px solid rgba(168,85,247,0.4);
-          color:var(--purple);border-radius:20px;padding:4px 12px;font-size:0.78rem;font-weight:700;">Q7</div>
-        <div style="background:rgba(255,107,0,0.15);border:1px solid rgba(255,107,0,0.35);
-          color:var(--orange);border-radius:20px;padding:4px 12px;font-size:0.78rem;font-weight:700;">🔥 Multiply</div>
-        <div style="display:flex;gap:4px;font-size:1.2rem;">❤️❤️❤️</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
-        <div style="width:10px;height:10px;border-radius:50%;background:var(--green);"></div>
-        <div class="bar-track" style="flex:1;background:var(--g-500);">
-          <div class="bar-fill bar-xp" style="width:72%;"></div>
-        </div>
-        <span style="font-size:0.78rem;font-weight:800;color:var(--t-muted);">21s</span>
-      </div>
-      <div class="q-num">
-        <span>347</span>
-        <span class="q-op"> × </span>
-        <span>8</span>
-        <span class="q-eq"> = </span>
-        <span class="q-ans">?</span>
-      </div>
-      <div class="mcq-grid">
-        <div class="mcq-btn">2,516</div>
-        <div class="mcq-btn correct">2,776</div>
-        <div class="mcq-btn wrong">3,012</div>
-        <div class="mcq-btn">2,694</div>
-      </div>
-      <div style="text-align:center;font-family:'Fredoka One',cursive;font-size:1.6rem;color:var(--green);margin-top:8px;">Brilliant! 🌟</div>
-      <div style="text-align:center;font-size:0.9rem;font-weight:800;color:var(--orange);margin-top:4px;">🔥 7 in a row! Keep going!</div>
-    </div>
+  <div class="sidebar">
+    <div class="sb-logo">⚡ <span class="g">Math</span>Battle</div>
 
 ```
-<!-- Sidebar -->
-<div class="sidebar-preview">
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--g-500);">
-    <div class="sb-avatar">🧙</div>
+<div class="sb-sec">
+  <div class="sb-lbl">Score</div>
+  <div class="sb-box">
+    <span style="font-size:1.1rem;">🏆</span>
     <div>
-      <div class="sb-name">Pavin</div>
-      <div class="sb-level">LV 5 · Dragon Warrior</div>
-      <div style="font-size:0.65rem;color:var(--gold);font-weight:800;margin-top:2px;">📚 Tahun 3 → 4 🚀</div>
-    </div>
-    <div style="margin-left:auto;text-align:right;">
-      <div style="font-family:'Fredoka One',cursive;color:var(--gold);">🪙 340</div>
-      <div style="font-size:0.6rem;color:var(--t-muted);font-weight:700;">Coins</div>
+      <div class="sb-val" id="gScore">0</div>
+      <div class="sb-sublbl">Points</div>
     </div>
   </div>
-  <div style="display:flex;justify-content:space-between;font-size:0.7rem;font-weight:800;color:var(--t-muted);margin-bottom:3px;"><span>⭐ XP</span><span>340/540</span></div>
-  <div class="bar-track" style="background:var(--g-500);margin-bottom:12px;"><div class="bar-fill bar-xp" style="width:63%;"></div></div>
-  <div class="stat-grid" style="margin-bottom:12px;">
-    <div class="stat-card"><div class="stat-val" style="color:var(--orange);">🔥7</div><div class="stat-lbl">Streak</div></div>
-    <div class="stat-card"><div class="stat-val" style="color:var(--green);">42</div><div class="stat-lbl">Correct</div></div>
-    <div class="stat-card"><div class="stat-val" style="color:var(--cyan);">89%</div><div class="stat-lbl">Acc</div></div>
-    <div class="stat-card"><div class="stat-val" style="color:var(--gold);">🏆12</div><div class="stat-lbl">Best</div></div>
+</div>
+
+<div class="sb-sec">
+  <div class="sb-lbl">XP</div>
+  <div class="xp-box">
+    <div class="xp-row">
+      <span class="l">XP</span>
+      <span class="v" id="gXP">0</span>
+    </div>
+    <div class="xp-track"><div class="xp-fill" id="gXPBar" style="width:0%"></div></div>
   </div>
-  <div style="font-size:0.65rem;font-weight:900;color:var(--t-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Battle Mode</div>
-  <div class="mode-btn">✖️ Multiply</div>
-  <div class="mode-btn active">➗ Divide</div>
-  <div class="mode-btn">🔀 Mixed</div>
-  <div class="mode-btn">🧮 Abacus</div>
-  <div class="mode-btn">👹 Boss</div>
+</div>
+
+<div class="sb-sec">
+  <div class="sb-lbl">Streak</div>
+  <div class="streak-box">
+    <span class="streak-fire">🔥</span>
+    <div>
+      <div class="streak-num" id="gStreak">0</div>
+      <div class="streak-sub">Streak</div>
+    </div>
+  </div>
+</div>
+
+<div class="sb-sec">
+  <div class="sb-lbl">Hints 💡</div>
+  <div class="hints-row" id="hintsRow">
+    <div class="hint-pip" onclick="useHint()">💡</div>
+    <div class="hint-pip" onclick="useHint()">💡</div>
+    <div class="hint-pip" onclick="useHint()">💡</div>
+  </div>
+</div>
+
+<div class="sb-quit">
+  <button class="btn btn-ghost btn-sm btn-full" onclick="quitGame()">✕ Quit</button>
 </div>
 ```
 
   </div>
 
-  <div class="divider"></div>
+  <div class="game-main">
+    <div class="timer-row">
+      <span class="round-txt" id="gRound">Round 1 / 10</span>
+      <div class="timer-track"><div class="timer-fill" id="gTimerBar"></div></div>
+      <span class="timer-num" id="gTimerNum">15</span>
+    </div>
 
-  <!-- Progress Bars -->
+```
+<div class="q-card" id="qCard">
+  <div class="q-topic" id="qTopic">Multiplication</div>
+  <div class="q-text"  id="qText">7 × 8 = ?</div>
+  <div class="q-hint"  id="qHint"></div>
+</div>
 
-  <div style="font-size:0.72rem;font-weight:800;color:var(--t-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Progress Bars</div>
-  <div style="background:var(--g-700);border-radius:16px;padding:20px;margin-bottom:14px;">
-    <div class="bar-lbl"><span>⭐ XP Progress</span><span>340 / 540</span></div>
-    <div class="bar-track" style="background:var(--g-500);"><div class="bar-fill bar-xp" style="width:63%;"></div></div>
-    <div class="bar-lbl" style="margin-top:10px;"><span>👹 Boss HP</span><span>3/8</span></div>
-    <div class="bar-track" style="background:var(--g-500);"><div class="bar-fill bar-boss" style="width:37%;"></div></div>
-    <div class="bar-lbl" style="margin-top:10px;"><span>📅 Daily Quest</span><span>7/10</span></div>
-    <div class="bar-track" style="background:var(--g-500);"><div class="bar-fill bar-daily" style="width:70%;"></div></div>
+<div class="ans-grid" id="ansGrid"></div>
+```
+
   </div>
+</div>
 
-  <!-- Tags + Achievements -->
+<!-- ════════════════════════════════════
+     RESULTS SCREEN
+════════════════════════════════════ -->
 
-  <div class="row2">
+<div class="screen" id="sResults">
+  <div class="res-wrap">
+    <div class="res-trophy" id="resTrophy">🏆</div>
+    <div class="res-title"  id="resTitle">Well Done!</div>
+    <div class="res-sub"    id="resSub">You answered 8 of 10 correctly</div>
+    <div id="newBestWrap" style="display:none"><div class="new-best">🌟 New High Score!</div></div>
+    <div class="res-score"  id="resScore">0</div>
+    <div class="res-stats">
+      <div class="rstat"><span class="rstat-val" id="rsOk"  style="color:var(--green)">0</span><span class="rstat-lbl">Correct</span></div>
+      <div class="rstat"><span class="rstat-val" id="rsNo"  style="color:var(--red)">0</span><span class="rstat-lbl">Wrong</span></div>
+      <div class="rstat"><span class="rstat-val" id="rsBst" style="color:var(--orange)">0</span><span class="rstat-lbl">Best Streak</span></div>
+      <div class="rstat"><span class="rstat-val" id="rsXP"  style="color:var(--gold)">0</span><span class="rstat-lbl">XP Earned</span></div>
+      <div class="rstat"><span class="rstat-val" id="rsAcc" style="color:var(--blue)">0%</span><span class="rstat-lbl">Accuracy</span></div>
+      <div class="rstat"><span class="rstat-val" id="rsTim" style="color:var(--purple)">0s</span><span class="rstat-lbl">Avg Time</span></div>
+    </div>
+    <div class="res-btns">
+      <button class="btn btn-purple btn-lg btn-full" onclick="startGame()">⚡ Play Again</button>
+      <button class="btn btn-gold   btn-md btn-full" onclick="goHome()">🏠 Home</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     SURVEY SCREEN
+════════════════════════════════════ -->
+
+<div id="surveyScreen">
+  <div class="sv-wrap">
+    <div class="sv-logo">⚡ <span>Math</span>Battle</div>
     <div>
-      <div style="font-size:0.72rem;font-weight:800;color:var(--t-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Status Tags</div>
-      <div class="tag-row">
-        <span class="tag tag-correct">✓ Correct</span>
-        <span class="tag tag-wrong">✗ Wrong</span>
-        <span class="tag tag-streak">🔥 Streak ×7</span>
-        <span class="tag tag-xp">+50 XP</span>
-        <span class="tag tag-hint">💡 Hint</span>
+      <div class="sv-step" id="svStep">Question 1 of 3</div>
+      <div class="sv-prog" id="svProg">
+        <div class="sv-dot done"></div>
+        <div class="sv-dot"></div>
+        <div class="sv-dot"></div>
       </div>
     </div>
-    <div>
-      <div style="font-size:0.72rem;font-weight:800;color:var(--t-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Achievement Badges</div>
-      <div class="ach-row">
-        <div class="ach-b on">🌟</div>
-        <div class="ach-b on">🔥</div>
-        <div class="ach-b on">💥</div>
-        <div class="ach-b off">🌪️</div>
-        <div class="ach-b off">✅</div>
-        <div class="ach-b off">💯</div>
-        <div class="ach-b off">🏆</div>
-        <div class="ach-b off">⚔️</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- Popup -->
-
-  <div style="font-size:0.72rem;font-weight:800;color:var(--t-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Popups</div>
-  <div style="display:flex;gap:14px;flex-wrap:wrap;">
-    <div class="popup-demo">
-      <div class="popup-em">🎉</div>
-      <div class="popup-title">Level Up!</div>
-      <div class="popup-body">You are now a Dragon Warrior! Questions get harder — rewards get bigger!</div>
-      <div style="display:flex;gap:6px;justify-content:center;margin-bottom:16px;flex-wrap:wrap;">
-        <span class="chip">+120 🪙</span><span class="chip">❤️ Restored</span>
-      </div>
-      <button class="btn btn-play" style="width:100%;padding:13px;font-size:1rem;animation:none;">Continue ▶️</button>
-    </div>
-    <div class="popup-demo" style="border-color:rgba(34,197,94,0.4);">
-      <div class="popup-em">📅</div>
-      <div class="popup-title" style="color:var(--green);">Daily Quest!</div>
-      <div class="popup-body">10 questions done today. Bonus chest unlocked!</div>
-      <div style="display:flex;gap:6px;justify-content:center;margin-bottom:16px;">
-        <span class="chip">+30 🪙</span><span class="chip">+1 ❤️</span>
-      </div>
-      <button class="btn btn-correct" style="width:100%;padding:13px;font-size:1rem;">Awesome! 🎊</button>
+    <div class="sv-q"   id="svQ">How old are you?</div>
+    <div class="sv-sub" id="svSub">We'll personalise your experience</div>
+    <div class="sv-opts" id="svOpts"></div>
+    <div class="sv-btns">
+      <button class="sv-skip" onclick="svSkip()">Skip</button>
+      <button class="sv-next" id="svNext" onclick="svNext()" disabled>Next →</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ 6. SURVEY SCREEN ═══ -->
+<!-- ════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════ -->
 
-<div class="section">
-  <div class="sec-title"><div class="sec-dot"></div>6. Survey Screen Preview</div>
-  <div class="sec-sub">Clean warm white — feels safe and trustworthy for parents.</div>
-  <div class="survey-preview" style="max-width:560px;">
-    <div style="font-size:0.68rem;font-weight:800;color:#9B7FD4;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;">Step 1 of 3</div>
-    <div class="sv-title">About Your Child</div>
-    <div class="sv-sub">Basic details so we can personalise the experience.</div>
-    <label class="sv-lbl">Child's First Name *</label>
-    <input class="sv-input" type="text" placeholder="e.g. Pavin" readonly>
-    <label class="sv-lbl">Current School Standard *</label>
-    <div class="sv-grid">
-      <div class="sv-card"><div class="sv-card-num">1</div><div class="sv-card-lbl">Tahun 1</div></div>
-      <div class="sv-card sel"><div class="sv-card-num">2</div><div class="sv-card-lbl">Tahun 2</div></div>
-      <div class="sv-card"><div class="sv-card-num">3</div><div class="sv-card-lbl">Tahun 3</div></div>
-      <div class="sv-card"><div class="sv-card-num">4</div><div class="sv-card-lbl">Tahun 4</div></div>
-      <div class="sv-card"><div class="sv-card-num">5</div><div class="sv-card-lbl">Tahun 5</div></div>
-      <div class="sv-card"><div class="sv-card-num">6</div><div class="sv-card-lbl">Tahun 6</div></div>
-    </div>
-    <label class="sv-lbl">Confidence in Math</label>
-    <div class="sv-emoji-grid" style="margin-bottom:18px;">
-      <div class="sv-emoji"><span class="sv-emoji-em">😰</span><div class="sv-emoji-lbl">Struggles</div></div>
-      <div class="sv-emoji sel"><span class="sv-emoji-em">😊</span><div class="sv-emoji-lbl">Pretty Good</div></div>
-      <div class="sv-emoji"><span class="sv-emoji-em">🤩</span><div class="sv-emoji-lbl">Loves it!</div></div>
-      <div class="sv-emoji"><span class="sv-emoji-em">😐</span><div class="sv-emoji-lbl">Getting there</div></div>
-    </div>
-    <div class="sv-btn-row">
-      <button class="sv-back">← Back</button>
-      <button class="sv-next">Next → Parent Info</button>
-    </div>
-  </div>
-</div>
+<script>
+/* ── STARS ── */
+(function(){
+  var sf=document.getElementById('starfield');
+  for(var i=0;i<75;i++){
+    var s=document.createElement('div'),sz=Math.random()*2.5+.5;
+    s.className='star';
+    s.style.cssText='width:'+sz+'px;height:'+sz+'px;top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;--d:'+(2+Math.random()*4)+'s;--dl:'+(Math.random()*5)+'s;--lo:'+(0.04+Math.random()*.12)+';--hi:'+(0.3+Math.random()*.5)+';';
+    sf.appendChild(s);
+  }
+})();
 
-<!-- ═══ 7. USAGE RULES TABLE ═══ -->
+/* ── STORAGE ── */
+var LS={
+  g:function(k,d){try{var v=localStorage.getItem(k);return v!==null?JSON.parse(v):d;}catch(e){return d;}},
+  s:function(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+};
 
-<div class="section">
-  <div class="sec-title"><div class="sec-dot"></div>7. Usage Rules — Every Element Defined</div>
-  <div class="sec-sub">Copy these exact values into the CSS. No guessing, no inventing new colours.</div>
-  <div class="rules-box">
-    <div class="rule-row header">
-      <span>Element</span><span>Background</span><span>Text / Fill</span><span>Note</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">body (game)</span><span class="rule-bg">#110826</span>
-      <span class="rule-text">#F0E6FF</span><span class="rule-note">Always explicit, never transparent</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">main panel</span><span class="rule-bg">#1A0F3A</span>
-      <span class="rule-text">#F0E6FF</span><span class="rule-note">Right side game content area</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">arena card</span><span class="rule-bg">#231550</span>
-      <span class="rule-text">#FFFFFF</span><span class="rule-note">border: #3D2882</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">sidebar</span><span class="rule-bg">#2D1B69</span>
-      <span class="rule-text">#FFFFFF</span><span class="rule-note">border-right: #3D2882</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">stat card</span><span class="rule-bg">#2D1B69</span>
-      <span class="rule-text">token color</span><span class="rule-note">border: #3D2882</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">MCQ idle</span><span class="rule-bg">rgba(255,255,255,0.05)</span>
-      <span class="rule-text">#FFFFFF</span><span class="rule-note">border: #3D2882</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">MCQ correct</span><span class="rule-bg">rgba(34,197,94,0.15)</span>
-      <span class="rule-text">#FFFFFF</span><span class="rule-note">border: #22C55E, glow green</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">MCQ wrong</span><span class="rule-bg">rgba(255,68,68,0.12)</span>
-      <span class="rule-text">#FFFFFF</span><span class="rule-note">border: #FF4444, glow red</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">primary btn</span><span class="rule-bg">gradient #9333EA→#A855F7</span>
-      <span class="rule-text">#FFFFFF</span><span class="rule-note">shadow: purple glow</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">question num</span><span class="rule-bg">transparent</span>
-      <span class="rule-text">#FFFFFF (Fredoka)</span><span class="rule-note">text-shadow: purple glow</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">operator ×÷+−</span><span class="rule-bg">transparent</span>
-      <span class="rule-text">#FF6B00 orange</span><span class="rule-note">Fredoka One font</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">= sign</span><span class="rule-bg">transparent</span>
-      <span class="rule-text">#3D2882 muted</span><span class="rule-note">Fredoka One font</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">? answer</span><span class="rule-bg">transparent</span>
-      <span class="rule-text">#22D3EE cyan</span><span class="rule-note">Fredoka One font</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">XP bar</span><span class="rule-bg">gradient purple→pink</span>
-      <span class="rule-text">—</span><span class="rule-note">track: #3D2882</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">boss HP bar</span><span class="rule-bg">gradient red→orange</span>
-      <span class="rule-text">—</span><span class="rule-note">track: #3D2882</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">survey body</span><span class="rule-bg">#FAF8FF</span>
-      <span class="rule-text">#2D1B69</span><span class="rule-note">position:fixed, z-index:50</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">survey card</span><span class="rule-bg">#FFFFFF</span>
-      <span class="rule-text">#2D1B69</span><span class="rule-note">border: #E9E0FF</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">survey selected</span><span class="rule-bg">#F3EEFF</span>
-      <span class="rule-text">#2D1B69</span><span class="rule-note">border: #A855F7</span>
-    </div>
-    <div class="rule-row">
-      <span class="rule-el">survey btn</span><span class="rule-bg">gradient purple</span>
-      <span class="rule-text">#FFFFFF</span><span class="rule-note">Same as game primary btn</span>
-    </div>
-  </div>
-</div>
+/* ── STATE ── */
+var G={
+  diff:'easy',score:0,xp:0,streak:0,bestStreak:0,
+  round:0,rounds:10,hints:3,hintsUsed:0,
+  correct:0,wrong:0,answer:null,hint:'',
+  timerMax:20,timerLeft:20,timerInt:null,
+  timerStart:0,totalTime:0,locked:false,
+};
 
-<!-- ═══ 8. CRITICAL RULES ═══ -->
+var DIFF={
+  easy:  {time:20,ops:['+','-'],lo:1,hi:12,xm:1.0},
+  medium:{time:15,ops:['+','-','x'],lo:2,hi:15,xm:1.5},
+  hard:  {time:10,ops:['+','-','x','/'],lo:3,hi:20,xm:2.0},
+};
 
-<div class="section">
-  <div class="sec-title"><div class="sec-dot"></div>8. Critical Design Rules</div>
-  <div class="safe-avoid">
-    <div class="sa-box safe">
-      <div class="sa-title safe">✓ SAFE PAIRS</div>
-      <div class="sa-item">White / Warm White on any dark bg</div>
-      <div class="sa-item">Gold (#FBBF24) on #110826 or #231550</div>
-      <div class="sa-item">Green (#22C55E) on any dark bg</div>
-      <div class="sa-item">Orange (#FF6B00) on any dark bg</div>
-      <div class="sa-item">Cyan (#22D3EE) on any dark bg</div>
-      <div class="sa-item">Dark text (#2D1B69) on any survey light bg</div>
-      <div class="sa-item">White on purple button (#A855F7)</div>
-    </div>
-    <div class="sa-box avoid">
-      <div class="sa-title avoid">✗ AVOID</div>
-      <div class="sa-item">Purple text on card bg — 3:1 FAIL for small text</div>
-      <div class="sa-item">Muted (#9B7FD4) on sidebar for &lt;14px text</div>
-      <div class="sa-item">Any light text on light survey backgrounds</div>
-      <div class="sa-item">Any dark text on dark game backgrounds</div>
-      <div class="sa-item">Transparent bg on any element — always explicit</div>
-      <div class="sa-item">body without background color declared</div>
-    </div>
-    <div class="sa-box arch">
-      <div class="sa-title arch">🏗 ARCHITECTURE RULES</div>
-      <div class="sa-item">body always: background #110826</div>
-      <div class="sa-item">Survey: position:fixed, z-index:50, bg #FAF8FF</div>
-      <div class="sa-item">All game CSS variables in :root only</div>
-      <div class="sa-item">Survey CSS scoped under #surveyScreen</div>
-      <div class="sa-item">Fredoka One = numbers / scores / headings</div>
-      <div class="sa-item">Nunito = everything else</div>
-      <div class="sa-item">main-c always: background #1A0F3A explicit</div>
-    </div>
-  </div>
-</div>
+/* ── HELPERS ── */
+function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function shuffle(a){var b=[].concat(a);for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
 
-<!-- FOOTER -->
+/* ── SCREENS ── */
+function show(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');});
+  var el=document.getElementById(id);
+  if(el)el.classList.add('on');
+}
 
-<div style="text-align:center;padding:32px 0;border-top:1px solid var(--g-500);margin-top:20px;">
-  <div style="font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--gold);margin-bottom:6px;">
-    Math Battle Brand Validator v2 · Caesium Lab · Warm Purple Theme
-  </div>
-  <div style="font-size:0.8rem;color:var(--t-muted);font-weight:600;">
-    WCAG 2.1 Compliance Audit · Built for iPad · Approve this before any code is written
-  </div>
-</div>
+/* ── HOME ── */
+function updateHome(){
+  document.getElementById('hBest').textContent   = (LS.g('hs',0)||0).toLocaleString();
+  document.getElementById('hGames').textContent  = LS.g('gp',0)||0;
+  document.getElementById('hStreak').textContent = LS.g('bs',0)||0;
+}
+updateHome();
 
-</div>
+function pickDiff(d,el){
+  G.diff=d;
+  document.querySelectorAll('.diff-btn').forEach(function(b){b.classList.remove('sel');});
+  el.classList.add('sel');
+}
+
+function goHome(){show('sHome');updateHome();}
+function quitGame(){clearInterval(G.timerInt);goHome();}
+
+/* ── QUESTION GENERATOR ── */
+function genQ(){
+  var cfg=DIFF[G.diff];
+  var op=cfg.ops[Math.floor(Math.random()*cfg.ops.length)];
+  var a,b,ans,txt,topic,hint;
+  switch(op){
+    case '+':
+      a=ri(cfg.lo,cfg.hi);b=ri(cfg.lo,cfg.hi);
+      ans=a+b;txt=a+' + '+b+' = ?';topic='Addition';hint='Count up '+b+' from '+a;break;
+    case '-':
+      a=ri(cfg.lo+4,cfg.hi+4);b=ri(cfg.lo,a-1);
+      ans=a-b;txt=a+' − '+b+' = ?';topic='Subtraction';hint='What + '+b+' equals '+a+'?';break;
+    case 'x':
+      a=ri(1,Math.min(cfg.hi,12));b=ri(1,Math.min(cfg.hi,12));
+      ans=a*b;txt=a+' × '+b+' = ?';topic='Multiplication';hint=a+' groups of '+b;break;
+    case '/':
+      b=ri(2,9);a=b*ri(2,10);
+      ans=a/b;txt=a+' ÷ '+b+' = ?';topic='Division';hint=b+' × ? = '+a;break;
+  }
+  var wrongs=[];
+  var attempts=0;
+  while(wrongs.length<3&&attempts<40){
+    attempts++;
+    var w=ans+ri(-5,5);
+    if(w!==ans&&w>0&&wrongs.indexOf(w)<0)wrongs.push(w);
+  }
+  return{txt:txt,ans:ans,choices:shuffle([ans].concat(wrongs)),topic:topic,hint:hint};
+}
+
+/* ── GAME START ── */
+function startGame(){
+  var cfg=DIFF[G.diff];
+  G.score=0;G.xp=0;G.streak=0;G.bestStreak=0;
+  G.round=0;G.hints=3;G.hintsUsed=0;
+  G.correct=0;G.wrong=0;G.locked=false;G.totalTime=0;
+  G.timerMax=cfg.time;
+  resetHints();
+  show('sGame');
+  nextQ();
+}
+
+function resetHints(){
+  var row=document.getElementById('hintsRow');
+  var pips=row.querySelectorAll('.hint-pip');
+  pips.forEach(function(p){p.classList.remove('used');});
+}
+
+/* ── NEXT QUESTION ── */
+function nextQ(){
+  if(G.round>=G.rounds){endGame();return;}
+  G.round++;G.locked=false;
+  var q=genQ();
+  G.answer=q.ans;G.hint=q.hint;
+  document.getElementById('gRound').textContent='Round '+G.round+' / '+G.rounds;
+  document.getElementById('qTopic').textContent=q.topic;
+  document.getElementById('qText').textContent=q.txt;
+  document.getElementById('qHint').textContent='';
+  buildAnswers(q.choices);
+  // animate card
+  var card=document.getElementById('qCard');
+  card.style.animation='none';
+  requestAnimationFrame(function(){card.style.animation='fadeIn .3s ease';});
+  startTimer();
+}
+
+function buildAnswers(choices){
+  var grid=document.getElementById('ansGrid');
+  var letters=['A','B','C','D'];
+  grid.innerHTML='';
+  choices.forEach(function(c,i){
+    var btn=document.createElement('button');
+    btn.className='ans-btn';
+    btn.dataset.val=c;
+    btn.innerHTML='<span class="ltr">'+letters[i]+'</span>'+c;
+    btn.onclick=function(){checkAns(btn,c);};
+    grid.appendChild(btn);
+  });
+}
+
+/* ── TIMER ── */
+function startTimer(){
+  clearInterval(G.timerInt);
+  G.timerLeft=G.timerMax;
+  G.timerStart=Date.now();
+  updateTimer();
+  G.timerInt=setInterval(function(){
+    G.timerLeft-=1;
+    updateTimer();
+    if(G.timerLeft<=0){clearInterval(G.timerInt);timeUp();}
+  },1000);
+}
+
+function updateTimer(){
+  var pct=(G.timerLeft/G.timerMax)*100;
+  var bar=document.getElementById('gTimerBar');
+  var num=document.getElementById('gTimerNum');
+  bar.style.width=pct+'%';
+  num.textContent=G.timerLeft;
+  var hot=G.timerLeft<=5;
+  bar.classList.toggle('hot',hot);
+  num.classList.toggle('hot',hot);
+}
+
+function timeUp(){
+  if(G.locked)return;
+  G.locked=true;
+  G.wrong++;G.streak=0;
+  // highlight correct
+  document.querySelectorAll('.ans-btn').forEach(function(b){
+    b.classList.add('locked');
+    if(parseInt(b.dataset.val)===G.answer)b.classList.add('correct');
+  });
+  showToast('⏰ Time\'s up!','tok-no');
+  updateSidebar();
+  setTimeout(nextQ,1400);
+}
+
+/* ── ANSWER CHECK ── */
+function checkAns(btn,val){
+  if(G.locked)return;
+  G.locked=true;
+  clearInterval(G.timerInt);
+  var elapsed=(Date.now()-G.timerStart)/1000;
+  G.totalTime+=elapsed;
+  // lock all
+  document.querySelectorAll('.ans-btn').forEach(function(b){b.classList.add('locked');});
+  var ok=(val===G.answer);
+  if(ok){
+    btn.classList.add('correct');
+    G.correct++;
+    G.streak++;
+    if(G.streak>G.bestStreak)G.bestStreak=G.streak;
+    var cfg=DIFF[G.diff];
+    var timeBonus=Math.max(0,G.timerMax-Math.floor(elapsed));
+    var streakMult=1+Math.min(G.streak-1,4)*0.2;
+    var pts=Math.round((100+timeBonus*5)*streakMult*cfg.xm);
+    var xp=Math.round(pts/2);
+    G.score+=pts;G.xp+=xp;
+    showToast('✓ +'+pts,'tok-ok');
+    spawnXP(xp);
+    if(G.streak>1)showStreakBanner();
+    if(G.streak%5===0)confetti();
+  } else {
+    btn.classList.add('wrong');
+    // show correct
+    document.querySelectorAll('.ans-btn').forEach(function(b){
+      if(parseInt(b.dataset.val)===G.answer)b.classList.add('correct');
+    });
+    G.wrong++;G.streak=0;
+    showToast('✗ Wrong!','tok-no');
+  }
+  updateSidebar();
+  setTimeout(nextQ,ok?1200:1500);
+}
+
+/* ── HINT ── */
+function useHint(){
+  if(G.locked)return;
+  var row=document.getElementById('hintsRow');
+  var pips=row.querySelectorAll('.hint-pip:not(.used)');
+  if(pips.length===0)return;
+  pips[0].classList.add('used');
+  G.hintsUsed++;
+  document.getElementById('qHint').textContent='💡 '+G.hint;
+}
+
+/* ── SIDEBAR UPDATE ── */
+function updateSidebar(){
+  document.getElementById('gScore').textContent=G.score.toLocaleString();
+  document.getElementById('gXP').textContent=G.xp;
+  document.getElementById('gStreak').textContent=G.streak;
+  var pct=Math.min(100,(G.xp%500)/500*100);
+  document.getElementById('gXPBar').style.width=pct+'%';
+}
+
+/* ── TOAST ── */
+var toastTimer;
+function showToast(msg,cls){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='show '+cls;
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){t.className='';},1100);
+}
+
+/* ── XP POP ── */
+function spawnXP(xp){
+  var el=document.createElement('div');
+  el.className='xp-pop';
+  el.textContent='+'+xp+' XP';
+  el.style.left=(35+Math.random()*30)+'%';
+  el.style.top='40%';
+  document.body.appendChild(el);
+  setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},1200);
+}
+
+/* ── STREAK BANNER ── */
+var sbTimer;
+function showStreakBanner(){
+  var b=document.getElementById('streakBanner');
+  document.getElementById('streakBannerText').textContent='🔥 '+G.streak+'× Streak!';
+  b.classList.add('show');
+  clearTimeout(sbTimer);
+  sbTimer=setTimeout(function(){b.classList.remove('show');},1500);
+}
+
+/* ── CONFETTI ── */
+var cfColors=['#A855F7','#FBBF24','#22C55E','#FF4444','#38BDF8','#F472B6','#FF6B00'];
+function confetti(){
+  for(var i=0;i<30;i++){
+    var el=document.createElement('div');
+    el.className='cf';
+    el.style.cssText='left:'+(20+Math.random()*60)+'%;top:30%;background:'+cfColors[Math.floor(Math.random()*cfColors.length)]+';--cd:'+(1+Math.random()*.8)+'s;--cdl:'+(Math.random()*.3)+'s;--cx:'+(Math.random()*200-100)+'px;--cr:'+(Math.random()*720-360)+'deg;';
+    document.body.appendChild(el);
+    setTimeout(function(e){if(e.parentNode)e.parentNode.removeChild(e);},(2000),el);
+  }
+}
+
+/* ── END GAME ── */
+function endGame(){
+  clearInterval(G.timerInt);
+  var acc=G.rounds>0?Math.round(G.correct/G.rounds*100):0;
+  var avgTime=G.correct>0?(G.totalTime/G.rounds).toFixed(1):0;
+  // save
+  var prevBest=LS.g('hs',0)||0;
+  var isNew=G.score>prevBest;
+  if(isNew)LS.s('hs',G.score);
+  LS.s('gp',(LS.g('gp',0)||0)+1);
+  var prevBS=LS.g('bs',0)||0;
+  if(G.bestStreak>prevBS)LS.s('bs',G.bestStreak);
+  // trophy & title
+  var trophy='🏆',title='Well Done!';
+  if(acc>=90){trophy='🥇';title='Amazing!';}
+  else if(acc>=70){trophy='🥈';title='Well Done!';}
+  else if(acc>=50){trophy='🥉';title='Good Try!';}
+  else{trophy='💪';title='Keep Practising!';}
+  document.getElementById('resTrophy').textContent=trophy;
+  document.getElementById('resTitle').textContent=title;
+  document.getElementById('resSub').textContent='You answered '+G.correct+' of '+G.rounds+' correctly';
+  document.getElementById('resScore').textContent=G.score.toLocaleString();
+  document.getElementById('rsOk').textContent=G.correct;
+  document.getElementById('rsNo').textContent=G.wrong;
+  document.getElementById('rsBst').textContent=G.bestStreak;
+  document.getElementById('rsXP').textContent=G.xp;
+  document.getElementById('rsAcc').textContent=acc+'%';
+  document.getElementById('rsTim').textContent=avgTime+'s';
+  document.getElementById('newBestWrap').style.display=isNew?'block':'none';
+  show('sResults');
+  if(acc>=70)confetti();
+}
+
+/* ═══════════════════════════════════════
+   SURVEY
+═══════════════════════════════════════ */
+var SV={
+  step:0,picked:null,
+  answers:{},
+  questions:[
+    {
+      q:'How old are you?',sub:'We\'ll personalise your experience',
+      opts:['Ages 6–7','Ages 8–10','Ages 11–13','Ages 14+']
+    },
+    {
+      q:'What\'s your favourite topic?',sub:'We\'ll mix in more of what you like',
+      opts:['Addition & Subtraction','Multiplication & Division','Mixed Everything','Surprise me!']
+    },
+    {
+      q:'How fast do you want to go?',sub:'You can change this later',
+      opts:['Nice and slow 🐢','Normal pace ⚡','Super fast 🔥']
+    }
+  ]
+};
+
+function showSurvey(){
+  SV.step=0;SV.picked=null;SV.answers={};
+  renderSVStep();
+  document.getElementById('surveyScreen').classList.add('on');
+  document.getElementById('surveyScreen').style.display='flex';
+}
+function hideSurvey(){
+  document.getElementById('surveyScreen').classList.remove('on');
+  document.getElementById('surveyScreen').style.display='none';
+}
+
+function renderSVStep(){
+  var qs=SV.questions;
+  var s=SV.step;
+  SV.picked=null;
+  document.getElementById('svStep').textContent='Question '+(s+1)+' of '+qs.length;
+  // dots
+  var dots=document.getElementById('svProg').querySelectorAll('.sv-dot');
+  dots.forEach(function(d,i){d.classList.toggle('done',i<=s);});
+  document.getElementById('svQ').textContent=qs[s].q;
+  document.getElementById('svSub').textContent=qs[s].sub;
+  document.getElementById('svNext').disabled=true;
+  var opts=document.getElementById('svOpts');
+  opts.innerHTML='';
+  qs[s].opts.forEach(function(o,i){
+    var div=document.createElement('div');
+    div.className='sv-opt';
+    div.innerHTML='<div class="sv-check"></div><span>'+o+'</span>';
+    div.onclick=function(){
+      opts.querySelectorAll('.sv-opt').forEach(function(d){d.classList.remove('picked');d.querySelector('.sv-check').textContent='';});
+      div.classList.add('picked');
+      div.querySelector('.sv-check').textContent='✓';
+      SV.picked=i;
+      document.getElementById('svNext').disabled=false;
+    };
+    opts.appendChild(div);
+  });
+}
+
+function svNext(){
+  if(SV.picked===null)return;
+  SV.answers[SV.step]=SV.picked;
+  // apply diff from Q3
+  if(SV.step===2){
+    if(SV.picked===0)pickDiff('easy',document.querySelector('[data-d="easy"]'));
+    else if(SV.picked===1)pickDiff('medium',document.querySelector('[data-d="medium"]'));
+    else pickDiff('hard',document.querySelector('[data-d="hard"]'));
+  }
+  if(SV.step<SV.questions.length-1){SV.step++;renderSVStep();}
+  else{hideSurvey();}
+}
+function svSkip(){
+  if(SV.step<SV.questions.length-1){SV.step++;renderSVStep();}
+  else{hideSurvey();}
+}
+</script>
+
 </body>
 </html>
